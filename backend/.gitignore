@@ -1,0 +1,37 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Compiled files
+*.so
+*.dll
+*.exe
+
+# Python build files
+build/
+dist/
+*.egg-info/
+
+# Optional: ignore local JSON data files
+# (uncomment if the JSON is generated and shouldn't be tracked)
+# *.json
