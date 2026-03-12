@@ -7,6 +7,9 @@ function App() {
 
   const [model, setModel] = useState("llama3")
 
+  // Chargers returned from AI response
+  const [highlightedChargers, setHighlightedChargers] = useState([])
+
   return (
     <div className="h-screen w-screen flex bg-gradient-to-br from-slate-100 to-slate-200 text-gray-900">
 
@@ -19,14 +22,17 @@ function App() {
         {/* Chat Section */}
         <div className="flex flex-col flex-[1.2] bg-white shadow-inner">
 
-          <Chat model={model} />
+          <Chat
+            model={model}
+            setHighlightedChargers={setHighlightedChargers}
+          />
 
         </div>
 
         {/* Map Section */}
         <div className="flex-[1] border-l border-gray-200 bg-gray-50">
 
-          <EVMap />
+          <EVMap highlightedChargers={highlightedChargers} />
 
         </div>
 

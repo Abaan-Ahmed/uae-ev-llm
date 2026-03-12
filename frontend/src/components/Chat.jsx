@@ -3,7 +3,7 @@ import Message from "./Message"
 import PromptBox from "./PromptBox"
 import { askLLM } from "../api/llmApi"
 
-function Chat({ model }) {
+function Chat({ model, setHighlightedChargers }) {
 
   const [messages, setMessages] = useState([])
   const [isThinking, setIsThinking] = useState(false)
@@ -13,32 +13,41 @@ function Chat({ model }) {
   const sendPrompt = async (prompt) => {
 
     const userMsg = { role: "user", content: prompt }
-    const assistantMsg = { role: "assistant", content: "" }
 
     setMessages(prev => [...prev, userMsg])
 
     setIsThinking(true)
 
-    await askLLM(prompt, model, (token) => {
+    try {
 
-      setIsThinking(false)
+      const response = await askLLM(prompt, model)
 
-      assistantMsg.content += token
+      const assistantMsg = {
+        role: "assistant",
+        content: response.answer
+      }
 
-      setMessages(prev => {
+      setMessages(prev => [...prev, assistantMsg])
 
-        let updated = [...prev]
+      // Send chargers to map
+      if (response.chargers) {
+        setHighlightedChargers(response.chargers)
+      }
 
-        if (updated[updated.length - 1]?.role !== "assistant") {
-          updated.push({ ...assistantMsg })
-        } else {
-          updated[updated.length - 1] = { ...assistantMsg }
-        }
+    } catch (error) {
 
-        return updated
-      })
+      console.error("LLM error:", error)
 
-    })
+      const errorMsg = {
+        role: "assistant",
+        content: "Sorry, something went wrong while contacting the AI."
+      }
+
+      setMessages(prev => [...prev, errorMsg])
+
+    }
+
+    setIsThinking(false)
   }
 
   // Auto scroll

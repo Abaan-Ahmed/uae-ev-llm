@@ -1,27 +1,37 @@
-export const askLLM = async (prompt, model, onToken) => {
+export const askLLM = async (prompt, model) => {
 
-  const response = await fetch("http://localhost:8000/ask", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      prompt,
-      model
+  return new Promise((resolve, reject) => {
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+
+      const lat = position.coords.latitude
+      const lng = position.coords.longitude
+
+      const response = await fetch("http://localhost:8000/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          model: model,
+          lat: lat,
+          lng: lng
+        })
+      })
+
+      const data = await response.json()
+
+      resolve(data)
+
+    }, (error) => {
+
+      console.error("Location error:", error)
+
+      reject(error)
+
     })
+
   })
 
-  const reader = response.body.getReader()
-  const decoder = new TextDecoder()
-
-  while (true) {
-
-    const { done, value } = await reader.read()
-
-    if (done) break
-
-    const chunk = decoder.decode(value)
-
-    onToken(chunk)
-  }
 }

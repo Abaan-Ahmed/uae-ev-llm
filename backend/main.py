@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from fastapi.responses import StreamingResponse
 import ollama
 import json
 
+from charger_search import find_nearest_chargers
+
 app = FastAPI()
 
-# Allow frontend (React) to connect
+# Allow React frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,46 +17,52 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Request format from frontend
 class PromptRequest(BaseModel):
     prompt: str
     model: str
-
-
-# Streaming response from Ollama
-def stream_llm(prompt, model):
-
-    response = ollama.chat(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": "You are an EV charging expert for UAE."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        stream=True
-    )
-
-    for chunk in response:
-        if "message" in chunk:
-            yield chunk["message"]["content"]
+    lat: float
+    lng: float
 
 
 # LLM endpoint
 @app.post("/ask")
 async def ask_question(data: PromptRequest):
 
-    return StreamingResponse(
-        stream_llm(data.prompt, data.model),
-        media_type="text/plain"
+    # Find nearest chargers
+    chargers = find_nearest_chargers(data.lat, data.lng)
+
+    charger_context = ""
+
+    for c in chargers:
+        charger_context += f"{c['name']} ({round(c['distance'],2)} km)\n"
+
+    system_prompt = f"""
+You are an EV charging assistant for UAE.
+
+Nearby chargers:
+{charger_context}
+
+Explain to the user which chargers are closest.
+Be concise and helpful.
+"""
+
+    response = ollama.chat(
+        model=data.model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": data.prompt},
+        ],
     )
 
+    return {
+        "answer": response["message"]["content"],
+        "chargers": chargers
+    }
 
-# EV charger dataset endpoint
+
+# Endpoint for map to load ALL chargers
 @app.get("/chargers")
 def get_chargers():
 
