@@ -263,7 +263,7 @@ Dr. Muhammad Fahad Zia
 
 Research Collaboration:
 
-Dr. Eyhab Al-Masri  
+Dr. Eyhab Al-Masri & Mansur  
 University of Washington
 
 ---
