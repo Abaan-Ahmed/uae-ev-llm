@@ -1,0 +1,682 @@
+[
+  {
+    "name": "ADNOC EV Charging Hub",
+    "lat": 24.43506549738585,
+    "lng": 54.622966050173545
+  },
+  {
+    "name": "ADNOC Charger",
+    "lat": 24.07164296814156,
+    "lng": 53.102325373013514
+  },
+  {
+    "name": "Adnoc Charger",
+    "lat": 24.071462054057292,
+    "lng": 53.102050583156824
+  },
+  {
+    "name": "Tesla Cybertruck Charge Station",
+    "lat": 25.13148207148032,
+    "lng": 55.24010994868058
+  },
+  {
+    "name": "Tesla Supercharger Sharjah",
+    "lat": 25.325776,
+    "lng": 55.394672
+  },
+  {
+    "name": "Tesla Supercharger Ras Al Khaimah",
+    "lat": 25.791492,
+    "lng": 55.966309
+  },
+  {
+    "name": "Tesla Supercharger Fujairah",
+    "lat": 25.1567685,
+    "lng": 56.3491074
+  },
+  {
+    "name": "Tesla Supercharger Dubai",
+    "lat": 25.199541,
+    "lng": 55.283352
+  },
+  {
+    "name": "Tesla Supercharger Dubai",
+    "lat": 25.116742,
+    "lng": 55.202845
+  },
+  {
+    "name": "Tesla Supercharger Dubai",
+    "lat": 25.1845221,
+    "lng": 55.2542576
+  },
+  {
+    "name": "Tesla Supercharger Dubai Hills Mall \u2013 Storm Coaster",
+    "lat": 25.1011944,
+    "lng": 55.2415
+  },
+  {
+    "name": "Tesla Supercharger Dubai Hills Mall - Grand Atrium",
+    "lat": 25.1011466,
+    "lng": 55.2401616
+  },
+  {
+    "name": "Tesla Supercharger Dubai - Wadi Al Safa",
+    "lat": 25.0795177,
+    "lng": 55.3664628
+  },
+  {
+    "name": "Tesla Supercharger Al Ain",
+    "lat": 24.246249,
+    "lng": 55.716056
+  },
+  {
+    "name": "Tesla Supercharger Al Ain",
+    "lat": 24.243903,
+    "lng": 55.715883
+  },
+  {
+    "name": "Tesla Supercharger Ajman",
+    "lat": 25.397859,
+    "lng": 55.479186
+  },
+  {
+    "name": "Tesla Supercharger Abu Dhabi",
+    "lat": 24.49042,
+    "lng": 54.61004
+  },
+  {
+    "name": "Tesla Supercharger Abu Dhabi",
+    "lat": 24.48978,
+    "lng": 54.61183
+  },
+  {
+    "name": "Tesla Supercharger Al Mirfa",
+    "lat": 24.100811,
+    "lng": 53.478877
+  },
+  {
+    "name": "Al Yash Street",
+    "lat": 24.06220367577066,
+    "lng": 52.624910059494596
+  },
+  {
+    "name": "EV Green Charger (DEWA) - City Center Me\u2019aisem",
+    "lat": 25.040493135635145,
+    "lng": 55.19561613755761
+  },
+  {
+    "name": "Jebel Ali - Southbound Supercharger",
+    "lat": 24.914774,
+    "lng": 54.961261
+  },
+  {
+    "name": "Four Seasons Hotel Abu Dhabi At Al Maryah Island",
+    "lat": 24.502955,
+    "lng": 54.38798
+  },
+  {
+    "name": "The Springs Souk",
+    "lat": 25.065938,
+    "lng": 55.192202
+  },
+  {
+    "name": "The Dubai Mall Fashion Parking",
+    "lat": 25.198724,
+    "lng": 55.276619
+  },
+  {
+    "name": "Qasr Al Watan",
+    "lat": 24.456804,
+    "lng": 54.312922
+  },
+  {
+    "name": "Steigenberger Hotel Business Bay",
+    "lat": 25.187123,
+    "lng": 55.271864
+  },
+  {
+    "name": "Dusitd2 Kenz Hotel",
+    "lat": 25.099102,
+    "lng": 55.173266
+  },
+  {
+    "name": "Caesars Palace Bluewaters Dubai",
+    "lat": 25.08077,
+    "lng": 55.120719
+  },
+  {
+    "name": "Caesars Resort Bluewaters Dubai",
+    "lat": 25.082309,
+    "lng": 55.122059
+  },
+  {
+    "name": "Radisson Blu Hotel, Abu Dhabi Yas Island",
+    "lat": 24.467452,
+    "lng": 54.598002
+  },
+  {
+    "name": "Ras Al Khaimah Courts Department",
+    "lat": 25.776389,
+    "lng": 55.935417
+  },
+  {
+    "name": "Two Seasons Hotel & Apartments",
+    "lat": 25.103176,
+    "lng": 55.172063
+  },
+  {
+    "name": "Emirates NBD Al Awir",
+    "lat": 25.157252,
+    "lng": 55.518447
+  },
+  {
+    "name": "Al Ain Square",
+    "lat": 24.246242,
+    "lng": 55.716037
+  },
+  {
+    "name": "M\u00f6venpick Hotel & Apartments Bur Dubai",
+    "lat": 25.234148,
+    "lng": 55.311636
+  },
+  {
+    "name": "Marriott Hotel Al Forsan",
+    "lat": 24.407461,
+    "lng": 54.548202
+  },
+  {
+    "name": "Hyatt Regency Dubai Creek Heights",
+    "lat": 25.234156,
+    "lng": 55.323959
+  },
+  {
+    "name": "Radisson Blu Hotel, Dubai Media City",
+    "lat": 25.094245,
+    "lng": 55.155992
+  },
+  {
+    "name": "Al Bait Sharjah",
+    "lat": 25.359221,
+    "lng": 55.383206
+  },
+  {
+    "name": "Aloft Me'aisem",
+    "lat": 24.470286,
+    "lng": 54.370118
+  },
+  {
+    "name": "Sheraton Sharjah Beach Resort & Spa",
+    "lat": 25.396145,
+    "lng": 55.422924
+  },
+  {
+    "name": "Emaar Square",
+    "lat": 25.200945,
+    "lng": 55.272379
+  },
+  {
+    "name": "Bulgari Resort & Residences Dubai",
+    "lat": 25.210348,
+    "lng": 55.236351
+  },
+  {
+    "name": "City Centre Deira",
+    "lat": 25.251927,
+    "lng": 55.332803
+  },
+  {
+    "name": "Jumeirah Saadiyat Island Resort",
+    "lat": 24.56045,
+    "lng": 54.452702
+  },
+  {
+    "name": "The Retreat Palm Dubai Mgallery By Sofitel",
+    "lat": 25.139261,
+    "lng": 55.142744
+  },
+  {
+    "name": "Rove Dubai Marina",
+    "lat": 25.069468,
+    "lng": 55.128023
+  },
+  {
+    "name": "Sheraton Dubai Creek Hotel & Towers",
+    "lat": 25.26158,
+    "lng": 55.31397
+  },
+  {
+    "name": "The Address Boulevard",
+    "lat": 25.200881,
+    "lng": 55.276203
+  },
+  {
+    "name": "One&only Royal Mirage Dubai",
+    "lat": 25.099428,
+    "lng": 55.133462
+  },
+  {
+    "name": "Marina Mall, Abu Dhabi",
+    "lat": 24.474472,
+    "lng": 54.323035
+  },
+  {
+    "name": "Emirates NBD Nad Al Sheba",
+    "lat": 25.171479,
+    "lng": 55.322363
+  },
+  {
+    "name": "Dubai Marina Mall",
+    "lat": 25.07642,
+    "lng": 55.140558
+  },
+  {
+    "name": "Warner Bros. World Abu Dhabi",
+    "lat": 24.491042,
+    "lng": 54.599406
+  },
+  {
+    "name": "American University Sharjah",
+    "lat": 25.310493,
+    "lng": 55.487488
+  },
+  {
+    "name": "Viceroy Palm Jumeirah Dubai",
+    "lat": 25.104057,
+    "lng": 55.14847
+  },
+  {
+    "name": "Fujairah Chamber of Commerce & Industry",
+    "lat": 25.119928,
+    "lng": 56.329778
+  },
+  {
+    "name": "Le Meridien Al Aqah Beach Resort",
+    "lat": 25.507158,
+    "lng": 56.362748
+  },
+  {
+    "name": "Emirates NBD Meydan",
+    "lat": 25.159723,
+    "lng": 55.325037
+  },
+  {
+    "name": "Yas Viceroy",
+    "lat": 24.467432,
+    "lng": 54.604825
+  },
+  {
+    "name": "Etihad Towers",
+    "lat": 25.21803,
+    "lng": 55.282725
+  },
+  {
+    "name": "Le Meridien Dubai Hotel & Conference Centre",
+    "lat": 25.248907,
+    "lng": 55.347345
+  },
+  {
+    "name": "Dubai Festival City Mall",
+    "lat": 25.222191,
+    "lng": 55.3522
+  },
+  {
+    "name": "Saadiyat Rotana Resort and Villas",
+    "lat": 24.542785,
+    "lng": 54.429987
+  },
+  {
+    "name": "La Ville Hotel & Suites City Walk",
+    "lat": 25.208731,
+    "lng": 55.260344
+  },
+  {
+    "name": "One & Only Royal Mirage Hotel",
+    "lat": 25.097763,
+    "lng": 55.152912
+  },
+  {
+    "name": "Emirates Speciality Hospital Dubai Health Care City",
+    "lat": 25.232387,
+    "lng": 55.317741
+  },
+  {
+    "name": "The Westin Abu Dhabi Golf Resort & Spa",
+    "lat": 24.419564,
+    "lng": 54.528638
+  },
+  {
+    "name": "The Oberoi Dubai",
+    "lat": 25.185874,
+    "lng": 55.26321
+  },
+  {
+    "name": "Radisson Blu Hotel, Dubai Deira Creek",
+    "lat": 25.264943,
+    "lng": 55.311093
+  },
+  {
+    "name": "Crowne Plaza Dubai Deira",
+    "lat": 25.270783,
+    "lng": 55.327072
+  },
+  {
+    "name": "Capital Mall",
+    "lat": 24.375424,
+    "lng": 54.530577
+  },
+  {
+    "name": "Dusit Thani Abu Dhabi",
+    "lat": 24.455082,
+    "lng": 54.394675
+  },
+  {
+    "name": "Sofitel the Palm",
+    "lat": 25.140205,
+    "lng": 55.133563
+  },
+  {
+    "name": "Air Force Officers Club & Hotel",
+    "lat": 24.40121,
+    "lng": 54.474611
+  },
+  {
+    "name": "Al Zorah Developement - Marina 1",
+    "lat": 25.429678,
+    "lng": 55.466185
+  },
+  {
+    "name": "Dukes Dubai",
+    "lat": 25.112116,
+    "lng": 55.138098
+  },
+  {
+    "name": "Qasr Al Sarab Desert Resort By Anantara",
+    "lat": 22.900221,
+    "lng": 54.336387
+  },
+  {
+    "name": "Fairmont Ajman",
+    "lat": 25.417764,
+    "lng": 55.439418
+  },
+  {
+    "name": "Deerfields Mall",
+    "lat": 24.52316,
+    "lng": 54.670636
+  },
+  {
+    "name": "The Sustainable City",
+    "lat": 25.026894,
+    "lng": 55.273119
+  },
+  {
+    "name": "Al Maha A Luxury Collection Desert Resort",
+    "lat": 24.823327,
+    "lng": 55.662537
+  },
+  {
+    "name": "Fairmont Dubai",
+    "lat": 25.226433,
+    "lng": 55.284261
+  },
+  {
+    "name": "Sahara Center",
+    "lat": 25.297431,
+    "lng": 55.372297
+  },
+  {
+    "name": "Element Me'aisem",
+    "lat": 24.470286,
+    "lng": 54.370118
+  },
+  {
+    "name": "Media One Hotel",
+    "lat": 25.089776,
+    "lng": 55.152204
+  },
+  {
+    "name": "Ferarri World Abu Dhabi",
+    "lat": 24.483815,
+    "lng": 54.607139
+  },
+  {
+    "name": "The Westin Mina Seyahi",
+    "lat": 25.092852,
+    "lng": 55.148992
+  },
+  {
+    "name": "Shangri-la Hotel Dubai",
+    "lat": 25.208462,
+    "lng": 55.271898
+  },
+  {
+    "name": "Fairmont Fujairah Beach Resort",
+    "lat": 25.586017,
+    "lng": 56.35579
+  },
+  {
+    "name": "Grand Hyatt Dubai",
+    "lat": 25.228448,
+    "lng": 55.327276
+  },
+  {
+    "name": "Fairmont the Palm",
+    "lat": 25.110685,
+    "lng": 55.140811
+  },
+  {
+    "name": "Hatta Supercharger",
+    "lat": 24.819503,
+    "lng": 56.134411
+  },
+  {
+    "name": "Radisson Blu Residence Dubai Marina",
+    "lat": 25.078449,
+    "lng": 55.143129
+  },
+  {
+    "name": "Atlantis the Palm",
+    "lat": 25.130404,
+    "lng": 55.117193
+  },
+  {
+    "name": "Kempinski Residences and Hotel Apartments",
+    "lat": 25.112869,
+    "lng": 55.10933
+  },
+  {
+    "name": "St Regis Saadiyat Island Resort",
+    "lat": 24.538398,
+    "lng": 54.42481
+  },
+  {
+    "name": "The Ritz-Carlton, Dubai International Financial Cent",
+    "lat": 25.212414,
+    "lng": 55.279513
+  },
+  {
+    "name": "Dubai Mall",
+    "lat": 25.197622,
+    "lng": 55.278624
+  },
+  {
+    "name": "The Address Dubai Marina",
+    "lat": 25.077092,
+    "lng": 55.140933
+  },
+  {
+    "name": "Anantara the Palm",
+    "lat": 25.129437,
+    "lng": 55.153146
+  },
+  {
+    "name": "Rove Downtown Dubai",
+    "lat": 25.202618,
+    "lng": 55.279699
+  },
+  {
+    "name": "Four Seasons Hotel Dubai",
+    "lat": 25.202368,
+    "lng": 55.23999
+  },
+  {
+    "name": "Armani Hotel Dubai",
+    "lat": 25.197108,
+    "lng": 55.274047
+  },
+  {
+    "name": "Bab Al Shams Desert Resort & Spa",
+    "lat": 24.816281,
+    "lng": 55.230425
+  },
+  {
+    "name": "Ritz-Carlton Dubai",
+    "lat": 25.082721,
+    "lng": 55.137538
+  },
+  {
+    "name": "Rosewood Abu Dhabi",
+    "lat": 24.499582,
+    "lng": 54.38786
+  },
+  {
+    "name": "Mall of the Emirates",
+    "lat": 25.118105,
+    "lng": 55.200566
+  },
+  {
+    "name": "Burj Al Arab",
+    "lat": 25.141272,
+    "lng": 55.185165
+  },
+  {
+    "name": "Al Wadi Desert Resort",
+    "lat": 25.584384,
+    "lng": 55.834832
+  },
+  {
+    "name": "Emirates Towers",
+    "lat": 25.217545,
+    "lng": 55.282854
+  },
+  {
+    "name": "The Address Montgomerie Dubai",
+    "lat": 25.067374,
+    "lng": 55.164217
+  },
+  {
+    "name": "Alserkal Avenue",
+    "lat": 25.141413,
+    "lng": 55.225272
+  },
+  {
+    "name": "Jumeirah At Etihad Towers",
+    "lat": 24.458802,
+    "lng": 54.321697
+  },
+  {
+    "name": "M\u00f6venpick Ibn Battuta Gate Hotel Dubai",
+    "lat": 25.041777,
+    "lng": 55.115497
+  },
+  {
+    "name": "Yas Mall",
+    "lat": 24.488446,
+    "lng": 54.608821
+  },
+  {
+    "name": "Jumeirah Mina A'salam",
+    "lat": 25.135215,
+    "lng": 55.186059
+  },
+  {
+    "name": "Ritz-Carlton Abu Dhabi",
+    "lat": 24.411599,
+    "lng": 54.48456
+  },
+  {
+    "name": "Intercontinental Dubai Marina",
+    "lat": 25.078947,
+    "lng": 55.137947
+  },
+  {
+    "name": "Jumeirah Al Qasr",
+    "lat": 25.131788,
+    "lng": 55.184377
+  },
+  {
+    "name": "Jumeirah Zabeel Saray",
+    "lat": 25.098489,
+    "lng": 55.123596
+  },
+  {
+    "name": "Jumeirah Beach Hotel",
+    "lat": 25.141584,
+    "lng": 55.191192
+  },
+  {
+    "name": "Jumeirah Al Naseem",
+    "lat": 25.137201,
+    "lng": 55.187005
+  },
+  {
+    "name": "The Meydan Hotel",
+    "lat": 25.155647,
+    "lng": 55.300311
+  },
+  {
+    "name": "M\u00f6venpick Hotel Jumeirah Beach",
+    "lat": 25.080202,
+    "lng": 55.136961
+  },
+  {
+    "name": "Four Seasons Hotel Abu Dhabi At Al Maryah Island",
+    "lat": 24.502955,
+    "lng": 54.38798
+  },
+  {
+    "name": "Jebel Ali Supercharger",
+    "lat": 24.910732,
+    "lng": 54.962517
+  },
+  {
+    "name": "Masdar City Supercharger",
+    "lat": 24.429485,
+    "lng": 54.62062
+  },
+  {
+    "name": "DEWA Mohammed Bin Rashid al Maktoum Solar Park",
+    "lat": 24.767633,
+    "lng": 55.369024
+  },
+  {
+    "name": "ENOC filling station",
+    "lat": 24.86904,
+    "lng": 55.026459
+  },
+  {
+    "name": "EPPCO filling station",
+    "lat": 24.926508149334204,
+    "lng": 55.006200706082154
+  },
+  {
+    "name": "The Beach underground car park",
+    "lat": 25.0767,
+    "lng": 55.131847
+  },
+  {
+    "name": "Dubai Electricity and Water Authority Umm Ramoul Customer Services Center",
+    "lat": 25.2255556,
+    "lng": 55.3761111
+  },
+  {
+    "name": "Dubai Municipality Umm Ramool",
+    "lat": 25.2374558,
+    "lng": 55.3630547
+  },
+  {
+    "name": "Dubai Silicon Oasis Headquarters",
+    "lat": 25.1240240918556,
+    "lng": 55.3813285354127
+  }
+]
