@@ -3,227 +3,335 @@
     "id": "Q01",
     "query": "Where can I charge my EV near me?",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
       "nearest_charger": "Intercontinental Dubai Marina",
       "city": "Dubai",
       "fast_only": false
     },
-    "tags": ["generic", "nearest"]
+    "tags": [
+      "generic",
+      "nearest"
+    ]
   },
   {
     "id": "Q02",
     "query": "Find me the nearest fast charger",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
-      "nearest_charger": "EV Green Charger (DEWA) - City Center Me'aisem",
+      "nearest_charger": "EV Green Charger (DEWA) - City Center Me’aisem",
       "city": "Dubai",
       "fast_only": true
     },
-    "tags": ["fast", "filter"]
+    "tags": [
+      "fast",
+      "filter"
+    ]
   },
   {
     "id": "Q03",
     "query": "I need a Tesla Supercharger nearby",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
       "nearest_charger": "Tesla Supercharger Dubai",
       "operator": "Tesla",
       "fast_only": true
     },
-    "tags": ["tesla", "operator", "filter"]
+    "tags": [
+      "tesla",
+      "operator",
+      "filter"
+    ]
   },
   {
     "id": "Q04",
     "query": "Any ADNOC chargers close by?",
     "location": "abu_dhabi",
-    "lat": 24.4539, "lng": 54.3773,
+    "lat": 24.4539,
+    "lng": 54.3773,
     "expected": {
       "operator": "ADNOC",
       "city": "Abu Dhabi",
       "fast_only": false
     },
-    "tags": ["adnoc", "operator", "filter"]
+    "tags": [
+      "adnoc",
+      "operator",
+      "filter"
+    ]
   },
   {
     "id": "Q05",
     "query": "Show me DC fast chargers in Dubai",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
       "city": "Dubai",
       "fast_only": true,
       "charger_type": "DC Fast"
     },
-    "tags": ["dc", "fast", "city"]
+    "tags": [
+      "dc",
+      "fast",
+      "city"
+    ]
   },
   {
     "id": "Q06",
     "query": "I need a CCS2 connector",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "connector": "CCS2",
       "city": "Dubai"
     },
-    "tags": ["connector", "ccs2"]
+    "tags": [
+      "connector",
+      "ccs2"
+    ]
   },
   {
     "id": "Q07",
     "query": "What is the closest charging station to me?",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "nearest_charger": "Armani Hotel Dubai",
       "city": "Dubai"
     },
-    "tags": ["generic", "nearest"]
+    "tags": [
+      "generic",
+      "nearest"
+    ]
   },
   {
     "id": "Q08",
     "query": "Find me a charger with at least 50kW",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "min_power_kw": 50,
       "fast_only": true
     },
-    "tags": ["power", "filter"]
+    "tags": [
+      "power",
+      "filter"
+    ]
   },
   {
     "id": "Q09",
     "query": "I need to charge in Abu Dhabi",
     "location": "abu_dhabi",
-    "lat": 24.4539, "lng": 54.3773,
+    "lat": 24.4539,
+    "lng": 54.3773,
     "expected": {
       "city": "Abu Dhabi"
     },
-    "tags": ["city", "abu_dhabi"]
+    "tags": [
+      "city",
+      "abu_dhabi"
+    ]
   },
   {
     "id": "Q10",
     "query": "Where is the Tesla Supercharger in Dubai Hills?",
     "location": "dubai_hills",
-    "lat": 25.1136, "lng": 55.2411,
+    "lat": 25.1136,
+    "lng": 55.2411,
     "expected": {
       "nearest_charger": "Tesla Supercharger Dubai Hills Mall",
       "operator": "Tesla",
       "fast_only": true
     },
-    "tags": ["tesla", "specific_location"]
+    "tags": [
+      "tesla",
+      "specific_location"
+    ]
   },
   {
     "id": "Q11",
     "query": "How many connectors does the nearest charger have?",
     "location": "dubai_hills",
-    "lat": 25.1136, "lng": 55.2411,
+    "lat": 25.1136,
+    "lng": 55.2411,
     "expected": {
       "nearest_charger": "Tesla Supercharger Dubai Hills Mall",
-      "reasoning_keywords": ["connector", "point", "8"]
+      "reasoning_keywords": [
+        "connector",
+        "point",
+        "8"
+      ]
     },
-    "tags": ["info", "reasoning"]
+    "tags": [
+      "info",
+      "reasoning"
+    ]
   },
   {
     "id": "Q12",
     "query": "I'm in Sharjah, where can I charge?",
     "location": "sharjah",
-    "lat": 25.3463, "lng": 55.4209,
+    "lat": 25.3463,
+    "lng": 55.4209,
     "expected": {
       "city": "Sharjah",
-      "nearest_charger": "Tesla Supercharger Sharjah"
+      "nearest_charger": "Al Bait Sharjah"
     },
-    "tags": ["city", "sharjah"]
+    "tags": [
+      "city",
+      "sharjah"
+    ]
   },
   {
     "id": "Q13",
     "query": "Find the quickest charging option near me",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
       "fast_only": true,
-      "reasoning_keywords": ["fast", "DC", "kW"]
+      "reasoning_keywords": [
+        "fast",
+        "DC",
+        "kW"
+      ]
     },
-    "tags": ["fast", "reasoning"]
+    "tags": [
+      "fast",
+      "reasoning"
+    ]
   },
   {
     "id": "Q14",
     "query": "I have a non-Tesla EV with CCS2, what chargers can I use?",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "connector": "CCS2",
-      "reasoning_keywords": ["CCS", "compatible", "connector"]
+      "reasoning_keywords": [
+        "CCS",
+        "compatible",
+        "connector"
+      ],
+      "exclude_operator": "Tesla"
     },
-    "tags": ["connector", "reasoning", "non_tesla"]
+    "tags": [
+      "connector",
+      "reasoning",
+      "non_tesla"
+    ]
   },
   {
     "id": "Q15",
     "query": "Are there any chargers near Yas Island?",
     "location": "yas_island",
-    "lat": 24.4672, "lng": 54.6077,
+    "lat": 24.4672,
+    "lng": 54.6077,
     "expected": {
       "nearest_charger": "Yas Viceroy",
       "city": "Abu Dhabi"
     },
-    "tags": ["yas_island", "specific_location"]
+    "tags": [
+      "yas_island",
+      "specific_location"
+    ]
   },
   {
     "id": "Q16",
     "query": "I need to charge quickly before heading to Abu Dhabi from Dubai",
     "location": "dubai_marina",
-    "lat": 25.0805, "lng": 55.1403,
+    "lat": 25.0805,
+    "lng": 55.1403,
     "expected": {
       "fast_only": true,
-      "reasoning_keywords": ["fast", "DC", "250", "kW"]
+      "reasoning_keywords": [
+        "fast",
+        "DC",
+        "250",
+        "kW"
+      ]
     },
-    "tags": ["fast", "intent", "reasoning"]
+    "tags": [
+      "fast",
+      "intent",
+      "reasoning"
+    ]
   },
   {
     "id": "Q17",
     "query": "What DEWA chargers are near downtown Dubai?",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "operator": "DEWA",
       "city": "Dubai"
     },
-    "tags": ["dewa", "operator"]
+    "tags": [
+      "dewa",
+      "operator"
+    ]
   },
   {
     "id": "Q18",
     "query": "Is there a charging station at a hotel near me?",
     "location": "downtown_dubai",
-    "lat": 25.1972, "lng": 55.2744,
+    "lat": 25.1972,
+    "lng": 55.2744,
     "expected": {
       "nearest_charger": "Armani Hotel Dubai",
-      "reasoning_keywords": ["hotel", "Armani"]
+      "reasoning_keywords": [
+        "hotel",
+        "Armani"
+      ]
     },
-    "tags": ["hotel", "contextual"]
+    "tags": [
+      "hotel",
+      "contextual"
+    ]
   },
   {
     "id": "Q19",
     "query": "Show me all fast chargers in Abu Dhabi",
     "location": "abu_dhabi",
-    "lat": 24.4539, "lng": 54.3773,
+    "lat": 24.4539,
+    "lng": 54.3773,
     "expected": {
       "city": "Abu Dhabi",
       "fast_only": true,
       "nearest_charger": "Tesla Supercharger Abu Dhabi"
     },
-    "tags": ["city", "fast", "abu_dhabi"]
+    "tags": [
+      "city",
+      "fast",
+      "abu_dhabi"
+    ]
   },
   {
     "id": "Q20",
     "query": "Where can I find a 250kW supercharger nearby?",
     "location": "dubai_hills",
-    "lat": 25.1136, "lng": 55.2411,
+    "lat": 25.1136,
+    "lng": 55.2411,
     "expected": {
       "nearest_charger": "Tesla Supercharger Dubai Hills Mall",
       "min_power_kw": 250,
       "fast_only": true
     },
-    "tags": ["power", "supercharger", "250kw"]
+    "tags": [
+      "power",
+      "supercharger",
+      "250kw"
+    ]
   }
 ]

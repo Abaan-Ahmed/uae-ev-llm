@@ -1,0 +1,8 @@
+# UAE EV LLM — backend dependencies
+# Install with: pip install -r requirements.txt
+
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+ollama>=0.2.0
+requests>=2.31.0
+pydantic>=2.0.0

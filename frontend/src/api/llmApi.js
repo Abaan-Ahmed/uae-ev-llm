@@ -1,11 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
-// UAE geographic center as fallback when geolocation is unavailable
+// UAE geographic center used as fallback when geolocation is unavailable
 const UAE_CENTER = { lat: 24.4539, lng: 54.3773 }
 
 /**
- * Resolves the user's location. Always resolves (never rejects):
- * returns { lat, lng, fallback: true } if geolocation is denied/unavailable.
+ * Resolves the user's location. Always resolves (never rejects).
+ * Returns { lat, lng, fallback: true } if geolocation is denied/unavailable.
  */
 export const getLocation = () =>
   new Promise((resolve) => {
@@ -25,14 +25,15 @@ export const getLocation = () =>
   })
 
 /**
- * Stream a response from the LLM.
+ * Stream a response from the LLM via Server-Sent Events.
  *
- * Calls onChargers({ chargers }) as soon as the map data arrives,
- * then calls onToken(token) for each streamed text chunk,
- * then calls onDone() when the stream closes.
- * Calls onError(err) if the request fails.
+ * Calls:
+ *   onChargers(chargers[])  — as soon as map data arrives
+ *   onToken(token)          — for each streamed text chunk
+ *   onDone()                — when the stream closes cleanly
+ *   onError(err)            — on fetch or parse failure
  *
- * Returns { locationFallback: bool }.
+ * Returns { locationFallback: bool }
  */
 export const askLLMStream = async (
   prompt,
@@ -59,9 +60,9 @@ export const askLLMStream = async (
       throw new Error(`Server error: ${response.status}`)
     }
 
-    const reader = response.body.getReader()
+    const reader  = response.body.getReader()
     const decoder = new TextDecoder()
-    let buffer = ""
+    let buffer    = ""
 
     while (true) {
       const { done, value } = await reader.read()
@@ -69,18 +70,18 @@ export const askLLMStream = async (
 
       buffer += decoder.decode(value, { stream: true })
       const lines = buffer.split("\n")
-      buffer = lines.pop() // keep any incomplete line for next iteration
+      buffer = lines.pop() // retain any incomplete line for the next chunk
 
       for (const line of lines) {
         if (!line.startsWith("data: ")) continue
         try {
           const event = JSON.parse(line.slice(6))
-          if (event.type === "chargers") onChargers?.(event.chargers)
-          else if (event.type === "token")  onToken?.(event.token)
-          else if (event.type === "done")   onDone?.()
-          else if (event.type === "error")  onError?.(new Error(event.message))
+          if      (event.type === "chargers") onChargers?.(event.chargers)
+          else if (event.type === "token")    onToken?.(event.token)
+          else if (event.type === "done")     onDone?.()
+          else if (event.type === "error")    onError?.(new Error(event.message))
         } catch {
-          // skip malformed SSE lines
+          // skip malformed SSE lines silently
         }
       }
     }

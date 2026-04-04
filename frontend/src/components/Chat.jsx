@@ -4,22 +4,24 @@ import PromptBox from "./PromptBox"
 import { askLLMStream } from "../api/llmApi"
 
 function Chat({ model, setHighlightedChargers }) {
-  const [messages, setMessages] = useState([])
-  const [isStreaming, setIsStreaming] = useState(false)
+  const [messages, setMessages]             = useState([])
+  const [isStreaming, setIsStreaming]        = useState(false)
   const [locationFallback, setLocationFallback] = useState(false)
   const bottomRef = useRef(null)
 
   const sendPrompt = async (prompt) => {
     if (isStreaming) return
 
+    // Fix #27: reset location fallback state on every new send
+    setLocationFallback(false)
+
     // Snapshot history before this turn (role + content only, no UI metadata)
     const history = messages.map((m) => ({ role: m.role, content: m.content }))
 
-    // Add user message to UI immediately
     setMessages((prev) => [...prev, { role: "user", content: prompt }])
     setIsStreaming(true)
 
-    // Add an empty streaming placeholder for the assistant
+    // Add empty streaming placeholder for the assistant
     setMessages((prev) => [...prev, { role: "assistant", content: "", streaming: true }])
 
     const result = await askLLMStream(prompt, model, history, {
@@ -72,7 +74,7 @@ function Chat({ model, setHighlightedChargers }) {
     }
   }
 
-  // Auto-scroll to bottom as tokens stream in
+  // Auto-scroll as tokens stream in
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
@@ -109,6 +111,7 @@ function Chat({ model, setHighlightedChargers }) {
                 <p>• Show me Tesla Superchargers in Dubai</p>
                 <p>• Are there CCS2 chargers in Abu Dhabi?</p>
                 <p>• What ADNOC chargers are nearby?</p>
+                <p>• I have a non-Tesla EV, which CCS2 chargers can I use?</p>
               </div>
             </div>
           )}

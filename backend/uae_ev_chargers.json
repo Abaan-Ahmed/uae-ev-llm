@@ -19,7 +19,7 @@
     "name": "ADNOC Charger",
     "lat": 24.07164296814156,
     "lng": 53.102325373013514,
-    "city": "UAE",
+    "city": "Abu Dhabi",
     "charger_type": "AC Fast",
     "power_kw": 22,
     "connectors": [
@@ -35,7 +35,7 @@
     "name": "Adnoc Charger",
     "lat": 24.071462054057292,
     "lng": 53.102050583156824,
-    "city": "UAE",
+    "city": "Abu Dhabi",
     "charger_type": "AC Fast",
     "power_kw": 22,
     "connectors": [
@@ -66,7 +66,7 @@
     "name": "Tesla Supercharger Sharjah",
     "lat": 25.325776,
     "lng": 55.394672,
-    "city": "Dubai",
+    "city": "Sharjah",
     "charger_type": "DC Fast",
     "power_kw": 250,
     "connectors": [
@@ -96,7 +96,7 @@
     "name": "Tesla Supercharger Fujairah",
     "lat": 25.1567685,
     "lng": 56.3491074,
-    "city": "UAE",
+    "city": "Fujairah",
     "charger_type": "DC Fast",
     "power_kw": 250,
     "connectors": [
@@ -231,7 +231,7 @@
     "name": "Tesla Supercharger Ajman",
     "lat": 25.397859,
     "lng": 55.479186,
-    "city": "Sharjah",
+    "city": "Ajman",
     "charger_type": "DC Fast",
     "power_kw": 250,
     "connectors": [
@@ -276,7 +276,7 @@
     "name": "Tesla Supercharger Al Mirfa",
     "lat": 24.100811,
     "lng": 53.478877,
-    "city": "UAE",
+    "city": "Abu Dhabi",
     "charger_type": "DC Fast",
     "power_kw": 250,
     "connectors": [
@@ -291,7 +291,7 @@
     "name": "Al Yash Street",
     "lat": 24.06220367577066,
     "lng": 52.624910059494596,
-    "city": "UAE",
+    "city": "Abu Dhabi",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -306,7 +306,7 @@
     "name": "EV Green Charger (DEWA) - City Center Me\u2019aisem",
     "lat": 25.040493135635145,
     "lng": 55.19561613755761,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "DC Fast",
     "power_kw": 50,
     "connectors": [
@@ -323,7 +323,7 @@
     "name": "Jebel Ali - Southbound Supercharger",
     "lat": 24.914774,
     "lng": 54.961261,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -509,7 +509,7 @@
     "name": "Emirates NBD Al Awir",
     "lat": 25.157252,
     "lng": 55.518447,
-    "city": "Dubai",
+    "city": "Sharjah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -845,7 +845,7 @@
     "name": "American University Sharjah",
     "lat": 25.310493,
     "lng": 55.487488,
-    "city": "Dubai",
+    "city": "Sharjah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -875,7 +875,7 @@
     "name": "Fujairah Chamber of Commerce & Industry",
     "lat": 25.119928,
     "lng": 56.329778,
-    "city": "UAE",
+    "city": "Fujairah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -890,7 +890,7 @@
     "name": "Le Meridien Al Aqah Beach Resort",
     "lat": 25.507158,
     "lng": 56.362748,
-    "city": "UAE",
+    "city": "Fujairah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1167,7 +1167,7 @@
     "name": "Al Zorah Developement - Marina 1",
     "lat": 25.429678,
     "lng": 55.466185,
-    "city": "Sharjah",
+    "city": "Ajman",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1197,7 +1197,7 @@
     "name": "Qasr Al Sarab Desert Resort By Anantara",
     "lat": 22.900221,
     "lng": 54.336387,
-    "city": "UAE",
+    "city": "Abu Dhabi",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1212,7 +1212,7 @@
     "name": "Fairmont Ajman",
     "lat": 25.417764,
     "lng": 55.439418,
-    "city": "Sharjah",
+    "city": "Ajman",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1243,7 +1243,7 @@
     "name": "The Sustainable City",
     "lat": 25.026894,
     "lng": 55.273119,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1258,7 +1258,7 @@
     "name": "Al Maha A Luxury Collection Desert Resort",
     "lat": 24.823327,
     "lng": 55.662537,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1288,7 +1288,7 @@
     "name": "Sahara Center",
     "lat": 25.297431,
     "lng": 55.372297,
-    "city": "Dubai",
+    "city": "Sharjah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1380,7 +1380,7 @@
     "name": "Fairmont Fujairah Beach Resort",
     "lat": 25.586017,
     "lng": 56.35579,
-    "city": "UAE",
+    "city": "Ras Al Khaimah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1425,7 +1425,7 @@
     "name": "Hatta Supercharger",
     "lat": 24.819503,
     "lng": 56.134411,
-    "city": "UAE",
+    "city": "Fujairah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1609,7 +1609,7 @@
     "name": "Bab Al Shams Desert Resort & Spa",
     "lat": 24.816281,
     "lng": 55.230425,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1685,7 +1685,7 @@
     "name": "Al Wadi Desert Resort",
     "lat": 25.584384,
     "lng": 55.834832,
-    "city": "Umm Al Quwain / Fujairah",
+    "city": "Ras Al Khaimah",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1760,7 +1760,7 @@
     "name": "M\u00f6venpick Ibn Battuta Gate Hotel Dubai",
     "lat": 25.041777,
     "lng": 55.115497,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Fast",
     "power_kw": 22,
     "connectors": [
@@ -1946,7 +1946,7 @@
     "name": "Jebel Ali Supercharger",
     "lat": 24.910732,
     "lng": 54.962517,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -1976,7 +1976,7 @@
     "name": "DEWA Mohammed Bin Rashid al Maktoum Solar Park",
     "lat": 24.767633,
     "lng": 55.369024,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "DC Fast",
     "power_kw": 50,
     "connectors": [
@@ -1993,7 +1993,7 @@
     "name": "ENOC filling station",
     "lat": 24.86904,
     "lng": 55.026459,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [
@@ -2008,7 +2008,7 @@
     "name": "EPPCO filling station",
     "lat": 24.926508149334204,
     "lng": 55.006200706082154,
-    "city": "UAE",
+    "city": "Dubai",
     "charger_type": "AC Standard",
     "power_kw": 7,
     "connectors": [

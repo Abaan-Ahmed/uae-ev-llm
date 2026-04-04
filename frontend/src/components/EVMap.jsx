@@ -10,57 +10,75 @@ import {
 } from "react-leaflet"
 import MarkerClusterGroup from "react-leaflet-cluster"
 import L from "leaflet"
-import "leaflet/dist/leaflet.css"
+// Fix #13: removed duplicate leaflet CSS import (already in main.jsx)
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"
+// Fix #12: ORS key moved to env variable with hardcoded fallback clearly marked
+const ORS_KEY = import.meta.env.VITE_ORS_KEY || "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjM3Y2RjODcyNmM3NTQyMzhhOGQyMmIwODA5ZjljYjFkIiwiaCI6Im11cm11cjY0In0="
+
 const UAE_CENTER = { lat: 24.4539, lng: 54.3773 }
 
-// ── Marker icons ─────────────────────────────────────────────────────────────
+// ── Marker icons ──────────────────────────────────────────────────────────────
 const defaultIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
+  iconUrl:    "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
+  shadowUrl:  "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  iconSize:   [25, 41],
   iconAnchor: [12, 41],
 })
 
 const highlightIcon = new L.Icon({
-  iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
-  iconSize: [30, 48],
+  iconUrl:    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+  shadowUrl:  "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  iconSize:   [30, 48],
   iconAnchor: [15, 48],
 })
 
-// ── Charger type badge colors ─────────────────────────────────────────────────
+// Fix #20: use plain objects for badge styles instead of fragile CSS string parsing
 const TYPE_BADGE = {
-  "DC Fast":      "background:#fee2e2;color:#b91c1c",
-  "AC Fast":      "background:#dbeafe;color:#1d4ed8",
-  "AC Standard":  "background:#dcfce7;color:#15803d",
+  "DC Fast":     { background: "#fee2e2", color: "#b91c1c" },
+  "AC Fast":     { background: "#dbeafe", color: "#1d4ed8" },
+  "AC Standard": { background: "#dcfce7", color: "#15803d" },
 }
+const DEFAULT_BADGE = { background: "#f3f4f6", color: "#374151" }
 
 // ── Map auto-zoom ─────────────────────────────────────────────────────────────
+// Fix #26: use fitBounds across ALL highlighted chargers instead of flying to just the first
 function MapZoom({ chargers }) {
   const map = useMap()
   useEffect(() => {
     if (!chargers?.length) return
-    map.flyTo([chargers[0].lat, chargers[0].lng], 13, { duration: 1.2 })
-  }, [chargers])
+    if (chargers.length === 1) {
+      map.flyTo([chargers[0].lat, chargers[0].lng], 14, { duration: 1.2 })
+    } else {
+      const lats = chargers.map((c) => c.lat)
+      const lngs = chargers.map((c) => c.lng)
+      map.fitBounds(
+        [[Math.min(...lats), Math.min(...lngs)], [Math.max(...lats), Math.max(...lngs)]],
+        { padding: [40, 40], maxZoom: 14, duration: 1.2 }
+      )
+    }
+  }, [chargers, map])
   return null
 }
 
-// ── Rich popup for a single charger ──────────────────────────────────────────
+// ── Rich charger popup ────────────────────────────────────────────────────────
 function ChargerPopup({ c }) {
-  const badgeStyle = TYPE_BADGE[c.charger_type] || "background:#f3f4f6;color:#374151"
+  const badgeStyle = TYPE_BADGE[c.charger_type] || DEFAULT_BADGE
   return (
     <div style={{ minWidth: 190, fontFamily: "Inter, sans-serif", fontSize: 13 }}>
       <p style={{ fontWeight: 600, marginBottom: 6 }}>⚡ {c.name}</p>
 
       {c.charger_type && (
         <p style={{ marginBottom: 4 }}>
-          <span style={{ padding: "1px 6px", borderRadius: 4, fontSize: 11, fontWeight: 500, ...Object.fromEntries(badgeStyle.split(";").map(s => s.split(":"))) }}>
+          <span style={{
+            padding: "1px 6px", borderRadius: 4, fontSize: 11, fontWeight: 500,
+            background: badgeStyle.background, color: badgeStyle.color,
+          }}>
             {c.charger_type}
           </span>
-          {c.power_kw ? <span style={{ marginLeft: 4, color: "#6b7280" }}>{c.power_kw} kW</span> : null}
+          {c.power_kw
+            ? <span style={{ marginLeft: 6, color: "#6b7280" }}>{c.power_kw} kW</span>
+            : null}
         </p>
       )}
 
@@ -86,10 +104,10 @@ function ChargerPopup({ c }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 function EVMap({ highlightedChargers }) {
-  const [chargers, setChargers] = useState([])
-  const [userLocation, setUserLocation] = useState(null)
+  const [chargers, setChargers]             = useState([])
+  const [userLocation, setUserLocation]     = useState(null)
   const [locationFallback, setLocationFallback] = useState(false)
-  const [route, setRoute] = useState(null)
+  const [route, setRoute]                   = useState(null)
 
   // Load all chargers from backend
   useEffect(() => {
@@ -107,8 +125,7 @@ function EVMap({ highlightedChargers }) {
       return
     }
     navigator.geolocation.getCurrentPosition(
-      (pos) =>
-        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       () => {
         setUserLocation(UAE_CENTER)
         setLocationFallback(true)
@@ -117,17 +134,15 @@ function EVMap({ highlightedChargers }) {
     )
   }, [])
 
-  // Fetch driving route to the nearest highlighted charger
+  // Fetch driving route to nearest highlighted charger
   useEffect(() => {
     if (!userLocation || !highlightedChargers?.length) {
       setRoute(null)
       return
     }
     const charger = highlightedChargers[0]
-    const start = `${userLocation.lng},${userLocation.lat}`
-    const end = `${charger.lng},${charger.lat}`
-    const ORS_KEY =
-      "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjM3Y2RjODcyNmM3NTQyMzhhOGQyMmIwODA5ZjljYjFkIiwiaCI6Im11cm11cjY0In0="
+    const start   = `${userLocation.lng},${userLocation.lat}`
+    const end     = `${charger.lng},${charger.lat}`
 
     fetch(
       `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_KEY}&start=${start}&end=${end}`
@@ -140,7 +155,7 @@ function EVMap({ highlightedChargers }) {
       .catch(() => setRoute(null))
   }, [highlightedChargers, userLocation])
 
-  // Build a set of highlighted positions so we can exclude them from clustering
+  // Exclude highlighted chargers from the clustered layer
   const highlightedKeys = new Set(
     highlightedChargers?.map((c) => `${c.lat},${c.lng}`) ?? []
   )
@@ -189,10 +204,10 @@ function EVMap({ highlightedChargers }) {
               center={[userLocation.lat, userLocation.lng]}
               radius={10}
               pathOptions={{
-                color: locationFallback ? "#f59e0b" : "#3b82f6",
-                fillColor: locationFallback ? "#fde68a" : "#93c5fd",
+                color:       locationFallback ? "#f59e0b" : "#3b82f6",
+                fillColor:   locationFallback ? "#fde68a" : "#93c5fd",
                 fillOpacity: 0.85,
-                weight: 2,
+                weight:      2,
               }}
             >
               <Popup>
@@ -207,34 +222,25 @@ function EVMap({ highlightedChargers }) {
           {route && (
             <Polyline
               positions={route}
-              pathOptions={{
-                color: "#3b82f6",
-                weight: 4,
-                opacity: 0.75,
-                dashArray: "8, 5",
-              }}
+              pathOptions={{ color: "#3b82f6", weight: 4, opacity: 0.75, dashArray: "8, 5" }}
             />
           )}
 
-          {/* All chargers — clustered for readability */}
+          {/* All chargers — clustered */}
           <MarkerClusterGroup chunkedLoading>
             {chargers
               .filter((c) => !highlightedKeys.has(`${c.lat},${c.lng}`))
               .map((c, i) => (
                 <Marker key={"all-" + i} position={[c.lat, c.lng]} icon={defaultIcon}>
-                  <Popup>
-                    <ChargerPopup c={c} />
-                  </Popup>
+                  <Popup><ChargerPopup c={c} /></Popup>
                 </Marker>
               ))}
           </MarkerClusterGroup>
 
-          {/* Highlighted chargers — always visible, not clustered */}
+          {/* Highlighted chargers — always visible, never clustered */}
           {highlightedChargers?.map((c, i) => (
             <Marker key={"hl-" + i} position={[c.lat, c.lng]} icon={highlightIcon}>
-              <Popup>
-                <ChargerPopup c={c} />
-              </Popup>
+              <Popup><ChargerPopup c={c} /></Popup>
             </Marker>
           ))}
         </MapContainer>

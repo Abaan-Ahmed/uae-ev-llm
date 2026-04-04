@@ -1,25 +1,19 @@
-import React from "react"
+import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
 
 // Global styles
 import "./styles/index.css"
 
-// Leaflet map styles
+// Leaflet map styles — imported once here, NOT repeated in EVMap.jsx
 import "leaflet/dist/leaflet.css"
 
-// Optional: smoother UI rendering in modern browsers
-import { StrictMode } from "react"
-
 const rootElement = document.getElementById("root")
-
 if (!rootElement) {
   throw new Error("Root element not found")
 }
 
-const root = ReactDOM.createRoot(rootElement)
-
-root.render(
+ReactDOM.createRoot(rootElement).render(
   <StrictMode>
     <App />
   </StrictMode>

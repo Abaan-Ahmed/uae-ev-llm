@@ -1,24 +1,40 @@
+import asyncio
+import json
+import re
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-from pathlib import Path
+from pydantic import BaseModel, Field
 import ollama
-import json
-import re
 
 from charger_search import find_nearest_chargers
 
-app = FastAPI()
+app = FastAPI(title="UAE EV Charging API")
 
+# Fix #3: allow_credentials must be False when allow_origins=["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Fix #4: resolve data path relative to this file, not CWD
+_CHARGERS_PATH = Path(__file__).parent / "uae_ev_chargers.json"
+_EVAL_RESULTS_PATH = Path(__file__).parent / "eval_results.json"
+
+# Fix #8: cache charger list once at startup rather than re-reading on each request
+with open(_CHARGERS_PATH) as f:
+    _ALL_CHARGERS: list[dict] = json.load(f)
+
+# Fix #11: max conversation history turns sent to LLM (prevents context overflow)
+MAX_HISTORY_TURNS = 12
+
+
+# ── Models ────────────────────────────────────────────────────────────────────
 
 class ChatMessage(BaseModel):
     role: str
@@ -28,10 +44,13 @@ class ChatMessage(BaseModel):
 class PromptRequest(BaseModel):
     prompt: str
     model: str
-    lat: float
-    lng: float
+    # Fix: validate lat/lng ranges
+    lat: float = Field(default=24.4539, ge=-90.0, le=90.0)
+    lng: float = Field(default=54.3773, ge=-180.0, le=180.0)
     history: list[ChatMessage] = []
 
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _charger_context(charger: dict) -> str:
     """Format a single charger into a readable line for the LLM system prompt."""
@@ -70,31 +89,40 @@ def build_system_prompt(chargers: list, filters: dict) -> str:
         if clean:
             filter_summary = f"\nSearch filters applied: {json.dumps(clean)}"
 
-    return f"""You are an EV charging assistant for the UAE.
+    return f"""You are an EV charging assistant for the UAE. You have been given verified charger data from the backend — use it directly in your answer.
 
 Nearby chargers matching the user's request:
 {charger_context}
 {filter_summary}{fallback_note}
 
 Guidelines:
-- Recommend the most suitable chargers based on the user's question.
-- Mention charger type (AC/DC), power, and connectors when relevant.
+- Reference the chargers above by name. Do NOT invent or mention any charger not listed above.
+- Mention charger type (AC/DC), power (kW), and connector types when relevant.
+- Include distance so the user knows how far each option is.
 - Be concise and friendly. If the user asked for something specific (e.g. fast charger, Tesla), confirm whether results match.
 - You have access to conversation history — reference prior context when relevant.
 """
 
 
-def build_messages(system_prompt: str, history: list[ChatMessage], prompt: str) -> list[dict]:
+def build_messages(
+    system_prompt: str,
+    history: list[ChatMessage],
+    prompt: str,
+) -> list[dict]:
     msgs = [{"role": "system", "content": system_prompt}]
-    for msg in history:
+    # Fix #11: cap history to prevent context window overflow
+    trimmed = history[-(MAX_HISTORY_TURNS * 2):]
+    for msg in trimmed:
         msgs.append({"role": msg.role, "content": msg.content})
     msgs.append({"role": "user", "content": prompt})
     return msgs
 
 
-# Non-streaming endpoint (kept for compatibility)
+# ── Endpoints ─────────────────────────────────────────────────────────────────
+
 @app.post("/ask")
 async def ask_question(data: PromptRequest):
+    """Non-streaming endpoint (kept for eval harness compatibility)."""
     result = find_nearest_chargers(data.lat, data.lng, prompt=data.prompt)
     chargers = result["chargers"]
     filters = result["filters_applied"]
@@ -102,7 +130,10 @@ async def ask_question(data: PromptRequest):
     system_prompt = build_system_prompt(chargers, filters)
     messages = build_messages(system_prompt, data.history, data.prompt)
 
-    response = ollama.chat(model=data.model, messages=messages)
+    # Fix #5: run blocking ollama call in a thread so the event loop stays free
+    response = await asyncio.to_thread(
+        ollama.chat, model=data.model, messages=messages
+    )
 
     return {
         "answer": response["message"]["content"],
@@ -110,9 +141,9 @@ async def ask_question(data: PromptRequest):
     }
 
 
-# Streaming endpoint
 @app.post("/ask/stream")
 async def ask_stream(data: PromptRequest):
+    """Streaming endpoint — sends SSE events: chargers → tokens → done."""
     result = find_nearest_chargers(data.lat, data.lng, prompt=data.prompt)
     chargers = result["chargers"]
     filters = result["filters_applied"]
@@ -121,12 +152,16 @@ async def ask_stream(data: PromptRequest):
     messages = build_messages(system_prompt, data.history, data.prompt)
 
     async def generate():
-        # Send charger data first so the map updates immediately
+        # Send charger data immediately so the map updates before text arrives
         yield f"data: {json.dumps({'type': 'chargers', 'chargers': chargers})}\n\n"
 
         try:
-            stream = ollama.chat(model=data.model, messages=messages, stream=True)
-            for chunk in stream:
+            # Run blocking stream iterator in a thread
+            def _stream():
+                return list(ollama.chat(model=data.model, messages=messages, stream=True))
+
+            chunks = await asyncio.to_thread(_stream)
+            for chunk in chunks:
                 token = chunk["message"]["content"]
                 if token:
                     yield f"data: {json.dumps({'type': 'token', 'token': token})}\n\n"
@@ -145,41 +180,16 @@ async def ask_stream(data: PromptRequest):
     )
 
 
-# Health check — tells frontend if Ollama is reachable and which models are installed
-@app.get("/health")
-def health_check():
-    try:
-        models_response = ollama.list()
-        model_names = [m["name"] for m in models_response.get("models", [])]
-        return {"status": "ok", "models": model_names}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-# Endpoint for map to load ALL chargers
-@app.get("/chargers")
-def get_chargers():
-    with open("uae_ev_chargers.json", "r") as f:
-        chargers = json.load(f)
-    return chargers
-
-
-# ── Structured output endpoint ────────────────────────────────────────────────
-# Two-phase approach:
-#   1. LLM parses the user's intent → JSON action descriptor (no charger data yet)
-#   2. Backend executes the action (pure code) → guaranteed real results
-#   3. LLM narrates the backend results → response grounded in real data
-#
-# This eliminates hallucination: the LLM never invents charger names;
-# it only narrates results the backend has already verified.
+# ── Structured output (anti-hallucination) endpoint ───────────────────────────
 
 PARSE_SYSTEM = """You are a query parser for a UAE EV charging assistant.
-Parse the user's query into a JSON object only — no other text, no markdown.
+Parse the user's query into a JSON object only — no other text, no markdown fences.
 
 Return exactly this shape:
 {
   "fast_only": true | false | null,
   "operator": "Tesla" | "ADNOC" | "DEWA" | null,
+  "exclude_operator": "Tesla" | null,
   "city": "Dubai" | "Abu Dhabi" | "Sharjah" | "Ajman" | "Ras Al Khaimah" | "Fujairah" | "Al Ain" | null,
   "min_power_kw": <number> | null,
   "connector": "CCS2" | "CHAdeMO" | "Type 2" | null,
@@ -187,25 +197,26 @@ Return exactly this shape:
 }
 
 Rules:
-- If the user says "fast", "quick", "rapid", "DC", "supercharger" → fast_only: true
-- If the user says "slow", "AC", "overnight", "level 2" → fast_only: false
-- If the user names a specific city → set city
-- If the user names a kW value → set min_power_kw
-- All unknown fields must be null (not omitted)
+- "fast", "quick", "rapid", "DC", "supercharger" → fast_only: true
+- "slow", "AC", "overnight", "level 2" → fast_only: false
+- "non-tesla", "not tesla", "non-Tesla EV" → exclude_operator: "Tesla", operator: null
+- Named city → set city field
+- Explicit kW value → set min_power_kw
+- All unknown fields must be null (never omit them)
 """
 
 
 @app.post("/ask/structured")
 async def ask_structured(data: PromptRequest):
     """
-    Structured-output endpoint. Uses a two-phase LLM call to completely
-    prevent hallucination:
-      Phase 1 – LLM returns JSON action (no charger knowledge involved)
-      Phase 2 – Backend runs the action; LLM only narrates verified results
+    Two-phase anti-hallucination endpoint:
+      Phase 1 – LLM parses user intent into structured JSON (no charger knowledge)
+      Phase 2 – Backend runs query using parsed filters (pure code, guaranteed real data)
+      Phase 3 – LLM narrates only the verified backend results
     """
-
-    # ── Phase 1: Parse intent ────────────────────────────────────────────────
-    parse_response = ollama.chat(
+    # ── Phase 1: Intent parsing ──────────────────────────────────────────────
+    parse_response = await asyncio.to_thread(
+        ollama.chat,
         model=data.model,
         messages=[
             {"role": "system", "content": PARSE_SYSTEM},
@@ -214,24 +225,22 @@ async def ask_structured(data: PromptRequest):
     )
 
     raw_json = parse_response["message"]["content"].strip()
-    # Strip markdown fences if the model wraps in ```json ... ```
     raw_json = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw_json, flags=re.MULTILINE).strip()
 
-    parsed_action = {}
-    parse_error   = None
+    parsed_action: dict = {}
+    parse_error: str | None = None
     try:
         parsed_action = json.loads(raw_json)
     except json.JSONDecodeError as e:
         parse_error = str(e)
-        # Fall back to a plain search if parsing fails
-        parsed_action = {}
 
-    # ── Phase 2: Backend executes using parsed filters ───────────────────────
-    # Build a synthetic query string from the parsed action so charger_search
-    # can apply its keyword filters even without the original prompt text.
-    synthetic_query = data.prompt  # start with original
+    # ── Phase 2: Backend execution ───────────────────────────────────────────
+    # Build synthetic query string from the parsed action
+    synthetic_query = data.prompt
     if parsed_action.get("fast_only"):
         synthetic_query += " fast charger"
+    if parsed_action.get("exclude_operator"):
+        synthetic_query += f" non-{parsed_action['exclude_operator']}"
     if parsed_action.get("operator"):
         synthetic_query += f" {parsed_action['operator']}"
     if parsed_action.get("city"):
@@ -245,43 +254,68 @@ async def ask_structured(data: PromptRequest):
     chargers = result["chargers"]
     filters  = result["filters_applied"]
 
-    # ── Phase 3: LLM narrates verified results ───────────────────────────────
+    # ── Phase 3: Grounded narration ──────────────────────────────────────────
     charger_context = "\n".join(_charger_context(c) for c in chargers)
     intent_summary  = parsed_action.get("intent_summary", data.prompt)
 
     narrate_system = f"""You are an EV charging assistant for the UAE.
-The backend has already found these verified chargers matching the user's request.
-DO NOT mention any chargers outside this list.
+The backend has verified and returned these chargers. Reference ONLY these results.
+DO NOT mention any charger not listed below.
 
 {charger_context}
 
 User's intent: {intent_summary}
 
-Write a helpful, concise response explaining the best options from the list above.
-Include charger type, power, and distance where relevant.
+Write a helpful, concise response covering charger type, power, connectors, and distance.
 """
 
     messages = [{"role": "system", "content": narrate_system}]
-    for msg in data.history:
+    trimmed_history = data.history[-(MAX_HISTORY_TURNS * 2):]
+    for msg in trimmed_history:
         messages.append({"role": msg.role, "content": msg.content})
     messages.append({"role": "user", "content": data.prompt})
 
-    narrate_response = ollama.chat(model=data.model, messages=messages)
+    narrate_response = await asyncio.to_thread(
+        ollama.chat, model=data.model, messages=messages
+    )
 
     return {
-        "answer":         narrate_response["message"]["content"],
-        "chargers":       chargers,
-        "parsed_action":  parsed_action,
-        "parse_error":    parse_error,
+        "answer":          narrate_response["message"]["content"],
+        "chargers":        chargers,
+        "parsed_action":   parsed_action,
+        "parse_error":     parse_error,
         "filters_applied": filters,
     }
 
 
-# Serve the latest eval results so the frontend dashboard can read them
+@app.get("/health")
+async def health_check():
+    """Returns Ollama status and list of installed models."""
+    try:
+        # Fix #19: handle both old dict-style and new object-style ollama responses
+        models_response = await asyncio.to_thread(ollama.list)
+        raw_models = models_response.get("models", []) if isinstance(models_response, dict) else getattr(models_response, "models", [])
+        model_names = []
+        for m in raw_models:
+            if isinstance(m, dict):
+                model_names.append(m.get("name") or m.get("model", ""))
+            else:
+                model_names.append(getattr(m, "model", getattr(m, "name", str(m))))
+        return {"status": "ok", "models": [n for n in model_names if n]}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+@app.get("/chargers")
+async def get_chargers():
+    """Returns the full cached charger dataset for the map."""
+    return _ALL_CHARGERS
+
+
 @app.get("/eval-results")
-def get_eval_results():
-    results_path = Path(__file__).parent / "eval_results.json"
-    if not results_path.exists():
+async def get_eval_results():
+    """Serves latest eval run results to the dashboard."""
+    if not _EVAL_RESULTS_PATH.exists():
         return {"error": "No eval results found. Run: python eval.py"}
-    with open(results_path) as f:
+    with open(_EVAL_RESULTS_PATH) as f:
         return json.load(f)
