@@ -8,13 +8,13 @@ const MODEL_COLORS = {
   gemma:   { bg: "bg-emerald-100", text: "text-emerald-800", bar: "#059669" },
   phi:     { bg: "bg-orange-100",  text: "text-orange-800",  bar: "#ea580c" },
 }
-const DEFAULT_COLOR = { bg: "bg-gray-100", text: "text-gray-800", bar: "#6b7280" }
+const DEFAULT_COLOR = { bg: "bg-[var(--bg-elevated)]", text: "text-gray-800", bar: "#6b7280" }
 
 function ScoreBar({ value, color }) {
   const pct = Math.round((value ?? 0) * 100)
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+      <div className="flex-1 bg-[var(--bg-elevated)] rounded-full h-2 overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${pct}%`, backgroundColor: color }}
@@ -33,13 +33,13 @@ function ModelCard({ model, stats }) {
     { label: "Tool Usage", value: stats.avg_tool_usage },
   ]
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-4">
+    <div className="bg-transparent rounded-2xl border border-[var(--border)] shadow-sm p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${c.bg} ${c.text}`}>
           {model}
         </span>
         <div className="text-right">
-          <p className="text-xs text-gray-400">Avg Latency</p>
+          <p className="text-xs text-[var(--text-subtle)]">Avg Latency</p>
           <p className="text-lg font-semibold text-gray-800">{stats.avg_latency_s?.toFixed(1)}s</p>
         </div>
       </div>
@@ -47,7 +47,7 @@ function ModelCard({ model, stats }) {
       <div className="space-y-2">
         {scores.map(({ label, value }) => (
           <div key={label}>
-            <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <div className="flex justify-between text-xs text-[var(--text-muted)] mb-1">
               <span>{label}</span>
             </div>
             <ScoreBar value={value} color={c.bar} />
@@ -55,9 +55,9 @@ function ModelCard({ model, stats }) {
         ))}
       </div>
 
-      <div className="flex gap-3 pt-1 border-t border-gray-100 text-xs text-gray-500">
+      <div className="flex gap-3 pt-1 border-t border-gray-100 text-xs text-[var(--text-muted)]">
         <span>
-          <span className="font-medium text-gray-700">{stats.total_queries}</span> queries
+          <span className="font-medium text-[var(--text-primary)]">{stats.total_queries}</span> queries
         </span>
         {stats.errors > 0 && (
           <span className="text-red-500">
@@ -86,30 +86,30 @@ function ResultsTable({ results, selectedModel }) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-[var(--border)] shadow-sm">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 border-b border-gray-200">
+        <thead className="bg-[var(--bg-elevated)] border-b border-[var(--border)]">
           <tr>
             {["ID", "Model", "Query", "Location", "Accuracy", "Reasoning", "Tool", "Latency", "Issues"].map(h => (
-              <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide">
                 {h}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-[var(--border)]">
           {filtered.map((r, i) => (
-            <tr key={i} className="hover:bg-slate-50 transition-colors">
-              <td className="px-4 py-3 font-mono text-xs text-gray-500">{r.query_id}</td>
+            <tr key={i} className="hover:bg-[var(--bg-surface)] transition-colors">
+              <td className="px-4 py-3 font-mono text-xs text-[var(--text-muted)]">{r.query_id}</td>
               <td className="px-4 py-3">
                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${(MODEL_COLORS[r.model] ?? DEFAULT_COLOR).bg} ${(MODEL_COLORS[r.model] ?? DEFAULT_COLOR).text}`}>
                   {r.model}
                 </span>
               </td>
               <td className="px-4 py-3 max-w-xs">
-                <span className="truncate block text-gray-700" title={r.query}>{r.query}</span>
+                <span className="truncate block text-[var(--text-primary)]" title={r.query}>{r.query}</span>
               </td>
-              <td className="px-4 py-3 text-gray-500 text-xs">{r.location}</td>
+              <td className="px-4 py-3 text-[var(--text-muted)] text-xs">{r.location}</td>
               <td className={`px-4 py-3 ${scoreColor(r.accuracy)}`}>
                 {r.error ? "—" : (r.accuracy * 100).toFixed(0) + "%"}
               </td>
@@ -142,12 +142,12 @@ function EmptyState({ onRefetch }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <div className="text-5xl mb-4">📊</div>
-      <h3 className="text-xl font-semibold text-gray-700 mb-2">No evaluation results yet</h3>
-      <p className="text-sm text-gray-400 max-w-sm mb-6">
+      <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">No evaluation results yet</h3>
+      <p className="text-sm text-[var(--text-subtle)] max-w-sm mb-6">
         Run the evaluation harness from the backend to generate results.
       </p>
       <div className="bg-gray-900 text-green-400 rounded-xl px-6 py-4 font-mono text-sm text-left mb-6">
-        <p className="text-gray-500 mb-1"># In your backend directory:</p>
+        <p className="text-[var(--text-muted)] mb-1"># In your backend directory:</p>
         <p>cd backend</p>
         <p>python eval.py</p>
       </div>
@@ -189,12 +189,12 @@ export default function EvalDashboard() {
   const models = data ? Object.keys(data.summary) : []
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto bg-slate-50">
+    <div className="flex flex-col h-full overflow-y-auto bg-[var(--bg-surface)]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5 flex items-center justify-between">
+      <div className="bg-transparent border-b border-[var(--border)] px-8 py-5 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Model Evaluation</h2>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <h2 className="text-xl font-semibold text-[var(--text-primary)]">Model Evaluation</h2>
+          <p className="text-xs text-[var(--text-subtle)] mt-0.5">
             {data
               ? `Last run: ${new Date(data.run_at).toLocaleString()} · ${data.results?.length ?? 0} total runs`
               : "Run eval.py to generate results"}
@@ -202,13 +202,13 @@ export default function EvalDashboard() {
         </div>
         <div className="flex items-center gap-3">
           {/* Tab switcher */}
-          <div className="flex bg-gray-100 rounded-lg p-1 text-sm">
+          <div className="flex bg-[var(--bg-elevated)] rounded-lg p-1 text-sm">
             {["summary", "results"].map(t => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
                 className={`px-3 py-1.5 rounded-md capitalize transition ${
-                  tab === t ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"
+                  tab === t ? "bg-transparent shadow text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {t}
@@ -226,7 +226,7 @@ export default function EvalDashboard() {
 
       <div className="flex-1 px-8 py-6">
         {loading && (
-          <div className="flex items-center justify-center py-24 text-gray-400">
+          <div className="flex items-center justify-center py-24 text-[var(--text-subtle)]">
             Loading results…
           </div>
         )}
@@ -242,22 +242,22 @@ export default function EvalDashboard() {
         {!loading && data && tab === "summary" && (
           <div className="space-y-6">
             {/* Dimension legend */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Evaluation Dimensions</h3>
+            <div className="bg-transparent border border-[var(--border)] rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Evaluation Dimensions</h3>
               <div className="grid grid-cols-2 gap-3 text-xs text-gray-600">
-                <div className="bg-slate-50 rounded-lg p-3">
+                <div className="bg-[var(--bg-surface)] rounded-lg p-3">
                   <p className="font-semibold text-gray-800 mb-1">📍 Accuracy</p>
                   <p>Did the backend return the correct charger, city, and type for the query?</p>
                 </div>
-                <div className="bg-slate-50 rounded-lg p-3">
+                <div className="bg-[var(--bg-surface)] rounded-lg p-3">
                   <p className="font-semibold text-gray-800 mb-1">🧠 Reasoning</p>
                   <p>Does the LLM explain distance, charger type, connectors, and make a recommendation?</p>
                 </div>
-                <div className="bg-slate-50 rounded-lg p-3">
+                <div className="bg-[var(--bg-surface)] rounded-lg p-3">
                   <p className="font-semibold text-gray-800 mb-1">🔧 Tool Usage</p>
                   <p>Does the LLM cite real charger names from the backend, or hallucinate?</p>
                 </div>
-                <div className="bg-slate-50 rounded-lg p-3">
+                <div className="bg-[var(--bg-surface)] rounded-lg p-3">
                   <p className="font-semibold text-gray-800 mb-1">⚡ Latency</p>
                   <p>End-to-end response time in seconds, including LLM inference.</p>
                 </div>
@@ -266,7 +266,7 @@ export default function EvalDashboard() {
 
             {/* Model cards */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">
                 Model Comparison
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -278,27 +278,27 @@ export default function EvalDashboard() {
 
             {/* Comparison table */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">
                 Side-by-side Summary
               </h3>
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+              <div className="bg-transparent rounded-2xl border border-[var(--border)] overflow-hidden shadow-sm">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-[var(--bg-elevated)] border-b border-[var(--border)]">
                     <tr>
                       {["Model", "Accuracy", "Reasoning", "Tool Usage", "Avg Latency", "Errors", "Hallucinations"].map(h => (
-                        <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        <th key={h} className="px-5 py-3 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide">
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-[var(--border)]">
                     {models.map(m => {
                       const s = data.summary[m]
                       const c = MODEL_COLORS[m] ?? DEFAULT_COLOR
                       const fmt = v => (v * 100).toFixed(1) + "%"
                       return (
-                        <tr key={m} className="hover:bg-slate-50">
+                        <tr key={m} className="hover:bg-[var(--bg-surface)]">
                           <td className="px-5 py-3">
                             <span className={`px-2 py-0.5 rounded font-medium text-xs ${c.bg} ${c.text}`}>{m}</span>
                           </td>
@@ -306,10 +306,10 @@ export default function EvalDashboard() {
                           <td className="px-5 py-3 font-mono text-sm">{fmt(s.avg_reasoning)}</td>
                           <td className="px-5 py-3 font-mono text-sm">{fmt(s.avg_tool_usage)}</td>
                           <td className="px-5 py-3 font-mono text-sm">{s.avg_latency_s?.toFixed(1)}s</td>
-                          <td className={`px-5 py-3 text-sm ${s.errors > 0 ? "text-red-500 font-medium" : "text-gray-400"}`}>
+                          <td className={`px-5 py-3 text-sm ${s.errors > 0 ? "text-red-500 font-medium" : "text-[var(--text-subtle)]"}`}>
                             {s.errors}
                           </td>
-                          <td className={`px-5 py-3 text-sm ${s.hallucinations > 0 ? "text-amber-600 font-medium" : "text-gray-400"}`}>
+                          <td className={`px-5 py-3 text-sm ${s.hallucinations > 0 ? "text-amber-600 font-medium" : "text-[var(--text-subtle)]"}`}>
                             {s.hallucinations}
                           </td>
                         </tr>
@@ -326,7 +326,7 @@ export default function EvalDashboard() {
           <div className="space-y-4">
             {/* Model filter */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 font-medium">Filter:</span>
+              <span className="text-xs text-[var(--text-muted)] font-medium">Filter:</span>
               {["all", ...models].map(m => {
                 const c = MODEL_COLORS[m] ?? DEFAULT_COLOR
                 const active = selectedModel === m
@@ -337,7 +337,7 @@ export default function EvalDashboard() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
                       active
                         ? `${c.bg} ${c.text} border-transparent`
-                        : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
+                        : "bg-transparent text-[var(--text-muted)] border-[var(--border)] hover:border-gray-300"
                     }`}
                   >
                     {m}

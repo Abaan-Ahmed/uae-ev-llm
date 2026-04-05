@@ -14,7 +14,6 @@ with open(_DATA_PATH) as f:
 # ---------------------------------------------------------------------------
 
 # Use word-boundary regex patterns to avoid substring false-positives
-_WB = r"(?<![a-z]){}(?![a-z])"   # simple word-boundary wrapper
 
 FAST_CHARGER_PATTERNS = [
     r"\bfast\b", r"\bquick\b", r"\brapid\b", r"\bdc\b",

@@ -1,32 +1,44 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Message from "./Message"
 import PromptBox from "./PromptBox"
 import { askLLMStream } from "../api/llmApi"
 
-function Chat({ model, setHighlightedChargers }) {
-  const [messages, setMessages]             = useState([])
-  const [isStreaming, setIsStreaming]        = useState(false)
+// Fix bug 4: generate stable unique IDs instead of using array index as key
+let _msgId = 0
+const nextId = () => `msg_${++_msgId}`
+
+function Chat({ model, setHighlightedChargers, prefill, onPrefillConsumed, onClearChat }) {
+  const [messages, setMessages]               = useState([])
+  const [isStreaming, setIsStreaming]          = useState(false)
   const [locationFallback, setLocationFallback] = useState(false)
   const bottomRef = useRef(null)
 
+  // Expose clear to parent via callback
+  const handleClear = useCallback(() => {
+    setMessages([])
+    setHighlightedChargers([])
+    setIsStreaming(false)
+  }, [setHighlightedChargers])
+
+  useEffect(() => {
+    onClearChat?.(handleClear)
+  }, [handleClear, onClearChat])
+
   const sendPrompt = async (prompt) => {
     if (isStreaming) return
-
-    // Fix #27: reset location fallback state on every new send
     setLocationFallback(false)
 
-    // Snapshot history before this turn (role + content only, no UI metadata)
-    const history = messages.map((m) => ({ role: m.role, content: m.content }))
+    const history = messages.map(m => ({ role: m.role, content: m.content }))
 
-    setMessages((prev) => [...prev, { role: "user", content: prompt }])
+    const userMsg = { id: nextId(), role: "user", content: prompt }
+    const assistantMsg = { id: nextId(), role: "assistant", content: "", streaming: true, chargers: [] }
+
+    setMessages(prev => [...prev, userMsg, assistantMsg])
     setIsStreaming(true)
-
-    // Add empty streaming placeholder for the assistant
-    setMessages((prev) => [...prev, { role: "assistant", content: "", streaming: true }])
 
     const result = await askLLMStream(prompt, model, history, {
       onToken: (token) => {
-        setMessages((prev) => {
+        setMessages(prev => {
           const updated = [...prev]
           const last = updated[updated.length - 1]
           if (last?.role === "assistant") {
@@ -38,10 +50,19 @@ function Chat({ model, setHighlightedChargers }) {
 
       onChargers: (chargers) => {
         setHighlightedChargers(chargers)
+        // Attach charger cards to the assistant message
+        setMessages(prev => {
+          const updated = [...prev]
+          const last = updated[updated.length - 1]
+          if (last?.role === "assistant") {
+            updated[updated.length - 1] = { ...last, chargers }
+          }
+          return updated
+        })
       },
 
       onDone: () => {
-        setMessages((prev) => {
+        setMessages(prev => {
           const updated = [...prev]
           const last = updated[updated.length - 1]
           if (last?.role === "assistant") {
@@ -54,12 +75,11 @@ function Chat({ model, setHighlightedChargers }) {
 
       onError: (err) => {
         console.error("Stream error:", err)
-        setMessages((prev) => {
+        setMessages(prev => {
           const updated = [...prev]
           updated[updated.length - 1] = {
-            role: "assistant",
-            content:
-              "Sorry, something went wrong. Please make sure Ollama is running with `ollama serve`.",
+            ...updated[updated.length - 1],
+            content: "Something went wrong. Make sure Ollama is running with `ollama serve`.",
             streaming: false,
             error: true,
           }
@@ -69,63 +89,104 @@ function Chat({ model, setHighlightedChargers }) {
       },
     })
 
-    if (result?.locationFallback) {
-      setLocationFallback(true)
-    }
+    if (result?.locationFallback) setLocationFallback(true)
   }
 
-  // Auto-scroll as tokens stream in
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
+  const isEmpty = messages.length === 0
+
   return (
-    <div className="flex flex-col flex-1 h-full">
+    <div className="flex flex-col h-full" style={{ background: "var(--bg-base)" }}>
       {/* Header */}
-      <div className="px-8 py-4 border-b bg-white flex items-center justify-between">
+      <div
+        className="flex items-center justify-between px-6 py-3 flex-shrink-0"
+        style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-surface)" }}
+      >
         <div>
-          <h2 className="font-semibold text-lg">EV Charging Assistant</h2>
-          <p className="text-xs text-gray-500">Powered by {model}</p>
+          <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+            EV Charging Assistant
+          </h2>
+          <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+            {model} · UAE infrastructure
+          </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {locationFallback && (
-            <div className="text-xs bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1 rounded-full">
-              📍 Using UAE center — location access denied
-            </div>
+            <span
+              className="text-xs px-2 py-1 rounded-lg"
+              style={{ background: "rgba(245,158,11,0.12)", color: "#fbbf24", border: "1px solid rgba(245,158,11,0.3)" }}
+            >
+              📍 UAE center
+            </span>
           )}
-          <div className="text-xs text-gray-400">UAE Charging Intelligence</div>
+          {!isEmpty && (
+            <span className="text-xs" style={{ color: "var(--text-subtle)", fontFamily: "'DM Mono', monospace" }}>
+              {messages.filter(m => m.role === "user").length} turn{messages.filter(m => m.role === "user").length !== 1 ? "s" : ""}
+            </span>
+          )}
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto bg-slate-50 px-6 py-8">
-        <div className="max-w-3xl mx-auto space-y-6">
-          {messages.length === 0 && (
-            <div className="text-center mt-20 text-gray-400">
-              <h3 className="text-xl font-medium mb-3">
-                Ask about EV charging in the UAE
-              </h3>
-              <p className="text-sm">Example questions:</p>
-              <div className="mt-4 space-y-2 text-sm">
-                <p>• Where can I find a fast charger near me?</p>
-                <p>• Show me Tesla Superchargers in Dubai</p>
-                <p>• Are there CCS2 chargers in Abu Dhabi?</p>
-                <p>• What ADNOC chargers are nearby?</p>
-                <p>• I have a non-Tesla EV, which CCS2 chargers can I use?</p>
-              </div>
+      <div className="flex-1 overflow-y-auto px-4 py-6">
+        {isEmpty && (
+          <div className="flex flex-col items-center justify-center h-full text-center" style={{ color: "var(--text-muted)" }}>
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-5"
+              style={{ background: "var(--accent-glow)", border: "1px solid var(--border-accent)" }}
+            >
+              ⚡
             </div>
-          )}
+            <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
+              UAE EV Charging Intelligence
+            </h3>
+            <p className="text-sm mb-6 max-w-xs leading-relaxed">
+              Ask about charging stations, fast chargers, connector types, or operators across the UAE.
+            </p>
+            <div className="grid grid-cols-2 gap-2 max-w-sm w-full">
+              {[
+                "Fast charger near me",
+                "Tesla Supercharger Dubai",
+                "CCS2 in Abu Dhabi",
+                "ADNOC chargers",
+              ].map(q => (
+                <button
+                  key={q}
+                  onClick={() => sendPrompt(q)}
+                  className="text-xs px-3 py-2.5 rounded-xl text-left transition-all"
+                  style={{
+                    background: "var(--bg-elevated)",
+                    border: "1px solid var(--border)",
+                    color: "var(--text-muted)",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-accent)"; e.currentTarget.style.color = "var(--accent)" }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)" }}
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
-          {messages.map((m, i) => (
-            <Message key={i} message={m} />
+        <div className="max-w-2xl mx-auto space-y-4">
+          {messages.map(m => (
+            <Message key={m.id} message={m} />
           ))}
-
           <div ref={bottomRef} />
         </div>
       </div>
 
       {/* Input */}
-      <PromptBox onSend={sendPrompt} disabled={isStreaming} />
+      <PromptBox
+        onSend={sendPrompt}
+        disabled={isStreaming}
+        prefill={prefill}
+        onPrefillConsumed={onPrefillConsumed}
+      />
     </div>
   )
 }

@@ -3,153 +3,220 @@ import { useState, useEffect } from "react"
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
 const TABS = [
-  { id: "chat", icon: "💬", label: "Chat" },
-  { id: "eval", icon: "📊", label: "Evaluation" },
+  { id: "chat", icon: "⚡", label: "Assistant" },
+  { id: "eval", icon: "◈", label: "Evaluation" },
 ]
 
-function Sidebar({ model, setModel, activeTab, setActiveTab }) {
-  const [ollamaStatus, setOllamaStatus]     = useState("checking")
+const MODELS = [
+  { value: "llama3",  label: "Llama 3",  tag: "Meta"     },
+  { value: "mistral", label: "Mistral",  tag: "Mistral"  },
+  { value: "phi",     label: "Phi-3",    tag: "Microsoft"},
+  { value: "gemma",   label: "Gemma",    tag: "Google"   },
+]
+
+const PROMPTS = [
+  { icon: "⚡", text: "Fast charger near me" },
+  { icon: "🔴", text: "Tesla Supercharger Dubai" },
+  { icon: "🔌", text: "CCS2 charger in Abu Dhabi" },
+  { icon: "🏢", text: "ADNOC chargers nearby" },
+  { icon: "🚗", text: "Non-Tesla CCS2 charger" },
+]
+
+function Sidebar({ model, setModel, activeTab, setActiveTab, onPromptSelect, onClearChat }) {
+  const [ollamaStatus, setOllamaStatus]       = useState("checking")
   const [installedModels, setInstalledModels] = useState([])
 
   useEffect(() => {
     fetch(`${API_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "ok") {
-          setOllamaStatus("connected")
-          setInstalledModels(data.models ?? [])
-        } else {
-          setOllamaStatus("error")
-        }
+      .then(r => r.json())
+      .then(d => {
+        setOllamaStatus(d.status === "ok" ? "connected" : "error")
+        setInstalledModels(d.models ?? [])
       })
       .catch(() => setOllamaStatus("error"))
   }, [])
 
-  const STATUS = {
-    checking:  { dot: "bg-yellow-400 animate-pulse", label: "Checking Ollama…" },
-    connected: { dot: "bg-green-400 animate-pulse",  label: "Ollama Connected" },
-    error:     { dot: "bg-red-400",                  label: "Ollama Offline" },
-  }
-  const status = STATUS[ollamaStatus]
-
   return (
-    <div className="w-72 h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col shadow-xl">
-      {/* Header */}
-      <div className="px-6 py-6 border-b border-slate-700">
-        <h1 className="text-2xl font-semibold tracking-tight">⚡ EV AI Lab</h1>
-        <p className="text-sm text-slate-400 mt-1">UAE Charging Intelligence</p>
-      </div>
-
-      {/* Navigation tabs */}
-      <div className="px-4 py-3 border-b border-slate-700">
-        <div className="flex flex-col gap-1">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-left ${
-                activeTab === t.id
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-400 hover:bg-slate-700 hover:text-white"
-              }`}
-            >
-              <span>{t.icon}</span>
-              <span>{t.label}</span>
-            </button>
-          ))}
+    <aside
+      style={{ background: "var(--bg-base)", borderRight: "1px solid var(--border)" }}
+      className="w-64 h-full flex flex-col flex-shrink-0"
+    >
+      {/* Logo */}
+      <div className="px-5 pt-6 pb-5" style={{ borderBottom: "1px solid var(--border)" }}>
+        <div className="flex items-center gap-2.5 mb-1">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0"
+            style={{ background: "var(--accent-glow)", border: "1px solid var(--border-accent)", color: "var(--accent)" }}
+          >
+            EV
+          </div>
+          <div>
+            <h1 className="text-sm font-semibold tracking-tight" style={{ color: "var(--text-primary)" }}>
+              EV AI Lab
+            </h1>
+            <p className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+              UAE · Local LLM
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Controls — only shown on chat tab */}
+      {/* Nav tabs */}
+      <div className="px-3 pt-3 pb-2">
+        {TABS.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm mb-1 text-left transition-all"
+            style={
+              activeTab === t.id
+                ? { background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--border-accent)" }
+                : { color: "var(--text-muted)", border: "1px solid transparent" }
+            }
+          >
+            <span className="text-base leading-none">{t.icon}</span>
+            <span className="font-medium">{t.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div style={{ borderTop: "1px solid var(--border)" }} className="mt-1" />
+
+      {/* Chat-specific controls */}
       {activeTab === "chat" && (
-        <div className="flex flex-col gap-6 px-6 py-6">
+        <div className="flex-1 overflow-y-auto px-3 py-3 flex flex-col gap-4">
+
           {/* Model selector */}
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">Model</p>
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            >
-              <option value="llama3">Llama3</option>
-              <option value="mistral">Mistral</option>
-              <option value="phi">Phi</option>
-              <option value="gemma">Gemma</option>
-            </select>
+            <p className="text-xs font-medium uppercase tracking-widest px-1 mb-2" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+              Model
+            </p>
+            <div className="flex flex-col gap-1">
+              {MODELS.map(m => (
+                <button
+                  key={m.value}
+                  onClick={() => setModel(m.value)}
+                  className="flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-all"
+                  style={
+                    model === m.value
+                      ? { background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--border-accent)" }
+                      : { color: "var(--text-muted)", border: "1px solid transparent", background: "transparent" }
+                  }
+                >
+                  <span className="font-semibold">{m.label}</span>
+                  <span style={{ color: "var(--text-subtle)", fontFamily: "'DM Mono', monospace" }}>{m.tag}</span>
+                </button>
+              ))}
+            </div>
             {ollamaStatus === "connected" && installedModels.length > 0 && (
-              <p className="text-xs text-slate-500 mt-1.5">
-                Installed: {installedModels.slice(0, 3).join(", ")}
+              <p className="text-xs mt-2 px-1" style={{ color: "var(--text-subtle)", fontFamily: "'DM Mono', monospace" }}>
+                installed: {installedModels.slice(0, 2).join(", ")}
               </p>
             )}
             {ollamaStatus === "error" && (
-              <p className="text-xs text-red-400 mt-1.5">
-                Run:{" "}
-                <code className="bg-slate-700 px-1.5 py-0.5 rounded font-mono">
-                  ollama serve
-                </code>
+              <p className="text-xs mt-2 px-1" style={{ color: "#f87171" }}>
+                Run <code style={{ fontFamily: "'DM Mono', monospace", background: "var(--bg-elevated)", padding: "1px 4px", borderRadius: 3 }}>ollama serve</code>
               </p>
             )}
           </div>
 
-          {/* Dataset */}
+          {/* Prompt suggestions — clickable */}
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">Dataset</p>
-            <div className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm flex items-center justify-between">
-              <span>UAE EV Chargers</span>
-              <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">Active</span>
-            </div>
-          </div>
-
-          {/* Prompt tips */}
-          <div>
-            <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">Try asking</p>
-            <div className="space-y-2">
-              {[
-                "Fast charger near me",
-                "Tesla Supercharger Dubai",
-                "CCS2 charger in Abu Dhabi",
-                "ADNOC chargers nearby",
-              ].map((tip) => (
-                <div
-                  key={tip}
-                  className="text-xs text-slate-400 bg-slate-700/50 rounded-lg px-3 py-2 italic leading-relaxed"
+            <p className="text-xs font-medium uppercase tracking-widest px-1 mb-2" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+              Try asking
+            </p>
+            <div className="flex flex-col gap-1">
+              {PROMPTS.map(p => (
+                <button
+                  key={p.text}
+                  onClick={() => onPromptSelect?.(p.text)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-left text-xs transition-all group"
+                  style={{ color: "var(--text-muted)", border: "1px solid transparent" }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = "var(--bg-elevated)"
+                    e.currentTarget.style.borderColor = "var(--border)"
+                    e.currentTarget.style.color = "var(--text-primary)"
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = "transparent"
+                    e.currentTarget.style.borderColor = "transparent"
+                    e.currentTarget.style.color = "var(--text-muted)"
+                  }}
                 >
-                  "{tip}"
-                </div>
+                  <span className="flex-shrink-0">{p.icon}</span>
+                  <span className="leading-relaxed">{p.text}</span>
+                </button>
               ))}
             </div>
           </div>
-        </div>
-      )}
 
-      {/* Eval tab info */}
-      {activeTab === "eval" && (
-        <div className="px-6 py-6">
-          <p className="text-xs uppercase tracking-wide text-slate-400 mb-3">Run Evaluation</p>
-          <div className="bg-slate-900 rounded-xl p-4 font-mono text-xs text-green-400 space-y-1">
-            <p className="text-slate-500"># All models, all queries:</p>
-            <p>python eval.py</p>
-            <p className="text-slate-500 mt-2"># Specific models:</p>
-            <p>python eval.py \</p>
-            <p className="pl-2">--models llama3 mistral</p>
+          {/* Dataset badge */}
+          <div>
+            <p className="text-xs font-medium uppercase tracking-widest px-1 mb-2" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+              Dataset
+            </p>
+            <div
+              className="flex items-center justify-between px-3 py-2 rounded-lg text-xs"
+              style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}
+            >
+              <span style={{ color: "var(--text-primary)" }}>UAE EV Chargers</span>
+              <span
+                className="font-medium px-1.5 py-0.5 rounded text-xs"
+                style={{ background: "var(--accent-glow)", color: "var(--accent)", fontFamily: "'DM Mono', monospace" }}
+              >
+                136
+              </span>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-3">
-            Results are served at <code className="bg-slate-700 px-1 rounded">/eval-results</code> and displayed here automatically.
-          </p>
+
+          {/* Clear chat */}
+          <button
+            onClick={onClearChat}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all"
+            style={{ color: "var(--text-muted)", border: "1px solid var(--border)" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#f87171"; e.currentTarget.style.color = "#f87171" }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)" }}
+          >
+            <span>↺</span>
+            <span>Clear conversation</span>
+          </button>
         </div>
       )}
 
-      <div className="flex-grow" />
+      {/* Eval tab hint */}
+      {activeTab === "eval" && (
+        <div className="flex-1 px-3 py-3">
+          <p className="text-xs font-medium uppercase tracking-widest px-1 mb-3" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+            Run Evaluation
+          </p>
+          <div
+            className="rounded-xl p-3 text-xs leading-relaxed"
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", fontFamily: "'DM Mono', monospace", color: "var(--accent)" }}
+          >
+            <p style={{ color: "var(--text-subtle)" }}># all models</p>
+            <p>python eval.py</p>
+            <p className="mt-2" style={{ color: "var(--text-subtle)" }}># specific</p>
+            <p>python eval.py \</p>
+            <p className="pl-2">--models llama3</p>
+          </div>
+        </div>
+      )}
 
       {/* Status footer */}
-      <div className="px-6 py-4 border-t border-slate-700">
-        <div className="flex items-center gap-2 text-sm">
-          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
-          {status.label}
+      <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid var(--border)" }}>
+        <div className="flex items-center gap-2">
+          <div
+            className={`w-2 h-2 rounded-full flex-shrink-0 ${ollamaStatus === "connected" ? "dot-online" : ""}`}
+            style={{
+              background: ollamaStatus === "connected" ? "var(--accent)" : ollamaStatus === "error" ? "#ef4444" : "#f59e0b"
+            }}
+          />
+          <span className="text-xs" style={{ color: "var(--text-muted)", fontFamily: "'DM Mono', monospace" }}>
+            {ollamaStatus === "connected" ? "ollama · online" : ollamaStatus === "error" ? "ollama · offline" : "ollama · checking"}
+          </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1">Local LLM Runtime</p>
       </div>
-    </div>
+    </aside>
   )
 }
 
