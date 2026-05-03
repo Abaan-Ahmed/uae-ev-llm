@@ -88,8 +88,8 @@ Compare **Llama 3**, **Mistral 7B**, **Gemma**, and **Phi-3** side-by-side on a 
 </td>
 <td width="50%">
 
-### 🐍 No Build Toolchain
-React is loaded via **CDN** — no npm, no Node.js, no bundler. The entire system is served by a single **FastAPI** application.
+### 🐍 Decoupled Stack
+A pure Python **FastAPI** backend and a separate **React** frontend — clean separation of concerns, with each layer independently runnable.
 
 </td>
 </tr>
@@ -123,7 +123,7 @@ flowchart TD
         Phi3["🔷 Phi-3\nMini 3.8B"]
     end
 
-    subgraph UI ["🖥️  Browser (React via CDN · served by FastAPI)"]
+    subgraph UI ["🖥️  React Frontend"]
         Map["Leaflet Map\nCARTO Positron Tiles"]
         Panel["Station Detail\nPanel"]
         QueryBox["Query Input\n& Results"]
@@ -193,10 +193,15 @@ uae-ev-llm/
 │       └── stations.json    # UAE Open Charge Map dataset (~136 stations)
 │
 ├── 📂 frontend/
-│   ├── index.html           # Main interface — React loaded via CDN script tags
-│   ├── App.jsx              # Root React component (served as static JS)
-│   ├── map.js               # Leaflet.js map — CARTO Positron + SVG markers
-│   └── style.css            # Styles & design tokens
+│   ├── src/
+│   │   ├── App.jsx              # Root React component
+│   │   ├── components/
+│   │   │   ├── QueryPanel.jsx   # Natural language query interface
+│   │   │   ├── MapView.jsx      # Leaflet map — CARTO Positron + SVG markers
+│   │   │   └── ModelSelector.jsx
+│   │   └── index.css            # Styles & design tokens
+│   ├── public/
+│   └── package.json
 │
 ├── 📂 paper/
 │   ├── main.tex             # IEEE conference paper (IEEEtran, ~7 pages)
@@ -232,13 +237,21 @@ cd uae-ev-llm
 pip install fastapi uvicorn httpx sentence-transformers
 ```
 
-### 3 — Run
+### 3 — Run the Backend
 
 ```bash
 uvicorn backend.main:app --reload --port 8000
 ```
 
-Open **[http://localhost:8000](http://localhost:8000)** — the map, query interface, and evaluation dashboard are all served from there.
+### 4 — Run the Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Open **[http://localhost:3000](http://localhost:3000)** for the React interface, which talks to the FastAPI backend at port 8000.
 
 ---
 
@@ -318,7 +331,7 @@ Open **[http://localhost:8000](http://localhost:8000)** — the map, query inter
 |:------|:-----------|
 | **LLM Runtime** | [Ollama](https://ollama.ai) — local model serving |
 | **Backend & API** | [FastAPI](https://fastapi.tiangolo.com) · Python 3.10+ · Uvicorn |
-| **Frontend** | React (via CDN) · Vanilla CSS · JavaScript (served by FastAPI) |
+| **Frontend** | [React](https://react.dev) · npm · CSS |
 | **Maps** | [Leaflet.js](https://leafletjs.com) · CARTO Positron tiles · Custom SVG markers |
 | **RAG** | Custom pipeline — chunking, sentence-transformers embeddings, cosine retrieval |
 | **Data Source** | [Open Charge Map API](https://openchargemap.org) — UAE dataset |
