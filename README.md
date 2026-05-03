@@ -1,32 +1,31 @@
 <div align="center">
 
-<!-- HERO BANNER -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=220&section=header&text=EV%20AI%20Lab&fontSize=72&fontColor=00e5ff&fontAlignY=38&desc=Intelligent%20EV%20Charging%20Infrastructure%20Query%20System%20for%20the%20UAE&descSize=18&descAlignY=60&descColor=b0bec5&animation=twinkling"/>
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=220&section=header&text=EV%20AI%20Lab&fontSize=72&fontColor=00e5ff&fontAlignY=38&desc=Intelligent%20EV%20Charging%20Infrastructure%20Query%20System%20for%20the%20UAE&descSize=18&descAlignY=60&descColor=b0bec5&animation=twinkling" alt="EV AI Lab Banner"/>
+  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=220&section=header&text=EV%20AI%20Lab&fontSize=78&fontColor=00e5ff&fontAlignY=38&desc=Intelligent%20EV%20Charging%20Infrastructure%20Query%20System%20for%20the%20UAE&descSize=17&descAlignY=62&descColor=90a4ae&animation=twinkling"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=220&section=header&text=EV%20AI%20Lab&fontSize=78&fontColor=00e5ff&fontAlignY=38&desc=Intelligent%20EV%20Charging%20Infrastructure%20Query%20System%20for%20the%20UAE&descSize=17&descAlignY=62&descColor=90a4ae&animation=twinkling" alt="EV AI Lab"/>
 </picture>
 
 <br/>
 
-<!-- BADGES ROW 1 -->
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?style=for-the-badge&logo=ollama&logoColor=white)
-
-<!-- BADGES ROW 2 -->
 ![RAG](https://img.shields.io/badge/Architecture-RAG-FF6F00?style=for-the-badge&logo=databricks&logoColor=white)
+
 ![UAE](https://img.shields.io/badge/Dataset-UAE%20EV%20Stations-00C853?style=for-the-badge&logo=tesla&logoColor=white)
-![AUD](https://img.shields.io/badge/American%20University%20in%20Dubai-EECE%20305-8B0000?style=for-the-badge&logo=academia&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+![AUD](https://img.shields.io/badge/American%20University%20in%20Dubai-EECE%20305-8B0000?style=for-the-badge)
+![UW](https://img.shields.io/badge/University%20of%20Washington-Collaboration-4B2E83?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-f4d03f?style=for-the-badge)
 
 <br/>
 
-> **A locally-deployed, privacy-preserving AI system for natural language querying of UAE EV charging infrastructure — no cloud, no hallucinations, just answers.**
+> **A fully local, privacy-preserving AI system that answers natural language questions about UAE EV charging infrastructure — powered by open-source LLMs and RAG, with zero cloud dependency.**
 
 <br/>
 
 [🚀 Quick Start](#-quick-start) &nbsp;·&nbsp; [🏗 Architecture](#-architecture) &nbsp;·&nbsp; [🤖 Models](#-model-evaluation) &nbsp;·&nbsp; [📊 Results](#-results) &nbsp;·&nbsp; [👥 Team](#-team)
+
+<br/>
 
 </div>
 
@@ -34,17 +33,17 @@
 
 ## 📌 Overview
 
-**EV AI Lab** is a research prototype developed at the **American University in Dubai (AUD)** in collaboration with the **University of Washington**. It demonstrates how open-source Large Language Models (LLMs) can be combined with **Retrieval-Augmented Generation (RAG)** to provide accurate, real-time answers about UAE electric vehicle charging stations — entirely on local hardware.
+**EV AI Lab** is a research system developed at the **American University in Dubai (AUD)** in collaboration with the **University of Washington**. It explores how open-source Large Language Models (LLMs), combined with **Retrieval-Augmented Generation (RAG)**, can provide accurate and grounded answers about real UAE electric vehicle charging stations — entirely on local hardware.
 
-The system was built to address a critical gap: existing EV infrastructure apps offer search but not *conversation*. EV AI Lab lets users ask questions in plain English and receive grounded, citation-backed answers directly from live data.
+The system benchmarks four leading open-source models across accuracy, latency, and hallucination rate, using live data from the **Open Charge Map** dataset (~136 UAE stations).
 
 ```
-"Where is the nearest fast-charger in Dubai Marina that supports Tesla?"
-                        ↓ EV AI Lab ↓
-"There are 2 DC fast chargers near Dubai Marina. The closest is at
- JBR Beach Parking (25.0789° N, 55.1345° E), approximately 0.3 km away.
- It supports CCS2 and CHAdeMO connectors, rated at 50 kW — compatible
- with Tesla via the included CHAdeMO adapter."
+User ❯  "Where can I find a fast charger near Dubai Marina that supports CCS2?"
+
+EV AI Lab ❯  "There is a 50 kW DC fast charger near Dubai Marina at JBR Beach Parking
+              (25.0789° N, 55.1345° E), approximately 0.3 km away. It supports CCS2
+              and CHAdeMO connectors and is currently operational."
+                                                         — Llama 3 · 3.1s · ✅ Grounded
 ```
 
 ---
@@ -55,14 +54,14 @@ The system was built to address a critical gap: existing EV infrastructure apps 
 <tr>
 <td width="50%">
 
-### 🧠 Local-First AI
-Run four state-of-the-art open-source LLMs entirely on your machine via **Ollama** — no API keys, no cloud costs, no data leaving your network.
+### 🧠 100% Local AI
+Four open-source LLMs run entirely on your machine via **Ollama** — no API keys, no subscription, no data leaving your network.
 
 </td>
 <td width="50%">
 
 ### 🗄️ RAG Pipeline
-A production-grade retrieval pipeline ingests the **Open Charge Map** dataset for UAE (~136 stations), vectorizes it, and injects only relevant context into each LLM prompt.
+A retrieval pipeline ingests, chunks, and vectorizes the UAE Open Charge Map dataset, injecting only relevant station context into each query.
 
 </td>
 </tr>
@@ -70,13 +69,13 @@ A production-grade retrieval pipeline ingests the **Open Charge Map** dataset fo
 <td width="50%">
 
 ### 🛡️ Hallucination Prevention
-Hard hallucinations (fabricated stations) are eliminated by design. The system distinguishes between hard and soft hallucinations and measures both in evaluation.
+**Hard hallucinations** (fabricated stations) are eliminated by design. The system independently tracks and reports hard vs. soft hallucination rates per model.
 
 </td>
 <td width="50%">
 
-### 🗺️ Interactive Map
-A React + Leaflet frontend with custom SVG markers visualizes all UAE charging stations in real time, with per-station detail panels and live query results.
+### 🗺️ Interactive Map Interface
+A Leaflet.js map (CARTO Positron tiles) with custom SVG markers lets users explore all UAE charging stations visually alongside query results.
 
 </td>
 </tr>
@@ -84,13 +83,13 @@ A React + Leaflet frontend with custom SVG markers visualizes all UAE charging s
 <td width="50%">
 
 ### ⚡ Multi-Model Benchmarking
-Evaluate **Llama 3**, **Mistral 7B**, **Gemma**, and **Phi-3** side-by-side on accuracy, latency, and hallucination rate — all from one dashboard.
+Compare **Llama 3**, **Mistral 7B**, **Gemma**, and **Phi-3** side-by-side on a shared test suite — accuracy, latency, and hallucination scorecards in one place.
 
 </td>
 <td width="50%">
 
-### 📄 PDF Report Generation
-Auto-generate structured evaluation reports via **ReportLab**, downloadable from the interface with per-model scorecards and dataset statistics.
+### 🐍 No Build Toolchain
+React is loaded via **CDN** — no npm, no Node.js, no bundler. The entire system is served by a single **FastAPI** application.
 
 </td>
 </tr>
@@ -104,61 +103,62 @@ Auto-generate structured evaluation reports via **ReportLab**, downloadable from
 flowchart TD
     User(["👤 User Query"]):::user
 
-    subgraph Frontend ["🖥️  React Frontend"]
-        UI["Query Interface"]
-        Map["Leaflet Map\n(CARTO Positron)"]
-        Panel["Station Detail Panel"]
-    end
-
-    subgraph Backend ["⚙️  FastAPI Backend"]
-        API["REST API\n/query  /stations  /evaluate"]
+    subgraph App ["🐍  FastAPI Application (Python)"]
+        API["REST Endpoints\n/query · /stations · /evaluate · /map"]
         RAG["RAG Pipeline\nChunking → Embedding → Retrieval"]
-        ModelRouter["Model Router\nLlama 3 · Mistral · Gemma · Phi-3"]
+        Router["Model Router\nLlama 3 · Mistral · Gemma · Phi-3"]
         Eval["Evaluation Engine\nAccuracy · Hallucination · Latency"]
+        Static["Static File Server\nHTML · CSS · JS · Leaflet"]
     end
 
     subgraph DataLayer ["📦  Data Layer"]
         OCM[("Open Charge Map\n~136 UAE Stations")]
-        VecStore[("Vector Store\nEmbeddings Index")]
+        VecStore[("Vector Index\nEmbeddings")]
     end
 
     subgraph LLMs ["🤖  Local LLMs via Ollama"]
-        Llama["Llama 3\n8B"]
-        Mistral["Mistral\n7B"]
-        Gemma["Gemma\n7B"]
-        Phi3["Phi-3\nMini"]
+        Llama["🦙 Llama 3\n8B"]
+        Mistral["🌪 Mistral\n7B"]
+        Gemma["💎 Gemma\n7B"]
+        Phi3["🔷 Phi-3\nMini 3.8B"]
     end
 
-    User --> UI
-    UI --> API
-    Map --> API
+    subgraph UI ["🖥️  Browser (React via CDN · served by FastAPI)"]
+        Map["Leaflet Map\nCARTO Positron Tiles"]
+        Panel["Station Detail\nPanel"]
+        QueryBox["Query Input\n& Results"]
+    end
+
+    User --> QueryBox
+    QueryBox --> API
     API --> RAG
     RAG --> VecStore
-    VecStore --> OCM
-    RAG --> ModelRouter
-    ModelRouter --> Llama & Mistral & Gemma & Phi3
+    VecStore -.->|"indexes"| OCM
+    RAG --> Router
+    Router --> Llama & Mistral & Gemma & Phi3
     Llama & Mistral & Gemma & Phi3 --> Eval
     Eval --> API
-    API --> UI & Panel
+    API --> QueryBox & Panel
+    Static --> Map
 
     classDef user fill:#00e5ff,color:#000,stroke:none
-    classDef default fill:#1e2a35,color:#cfd8dc,stroke:#37474f
+    classDef default fill:#1a2535,color:#cfd8dc,stroke:#2e3f50,stroke-width:1px
 ```
 
 ---
 
 ## 🤖 Model Evaluation
 
-Four open-source LLMs were benchmarked on UAE EV infrastructure Q&A tasks:
+Four open-source LLMs were benchmarked on a standardized UAE EV infrastructure Q&A test suite:
 
-| Model | Parameters | Accuracy | Hard Hallucinations | Soft Hallucinations | Avg. Latency |
-|:------|:----------:|:--------:|:-------------------:|:-------------------:|:------------:|
-| 🦙 **Llama 3** | 8B | ⭐ Highest | ✅ 0% | ✅ Minimal | ~3.2s |
-| 🌪 **Mistral 7B** | 7B | ⭐ High | ✅ 0% | ⚠️ Low | ~2.8s |
-| 💎 **Gemma** | 7B | ⭐ Moderate | ✅ 0% | ⚠️ Moderate | ~3.5s |
-| 🔷 **Phi-3 Mini** | 3.8B | ⭐ Moderate | ✅ 0% | ⚠️ Notable | ~1.9s |
+| Model | Size | Accuracy | Hard Hallucinations | Soft Hallucinations | Avg. Latency |
+|:------|:----:|:--------:|:-------------------:|:-------------------:|:------------:|
+| 🦙 **Llama 3** | 8B | 🥇 Highest | ✅ 0% | ✅ Minimal | ~3.2s |
+| 🌪 **Mistral 7B** | 7B | 🥈 High | ✅ 0% | ⚠️ Low | ~2.8s |
+| 💎 **Gemma** | 7B | 🥉 Moderate | ✅ 0% | ⚠️ Moderate | ~3.5s |
+| 🔷 **Phi-3 Mini** | 3.8B | — Moderate | ✅ 0% | ⚠️ Notable | ~1.9s |
 
-> **Key Finding:** RAG completely eliminates hard hallucinations (fabricated charging stations) across all four models. Soft hallucinations — minor factual imprecisions in descriptions — persist to varying degrees and are tracked separately.
+> **Key Finding:** RAG completely eliminates **hard hallucinations** (fabricated charging stations that do not exist) across all four models. **Soft hallucinations** — minor inaccuracies in descriptions such as imprecise connector types or operating hours — persist to varying degrees and are tracked as a separate metric.
 
 ---
 
@@ -168,12 +168,12 @@ Four open-source LLMs were benchmarked on UAE EV infrastructure Q&A tasks:
 
 | Metric | Value |
 |:-------|:-----:|
-| Total UAE Stations Indexed | **~136** |
+| UAE Stations Indexed | **~136** |
 | Hard Hallucination Rate (all models) | **0%** |
-| Best Accuracy Model | **Llama 3** |
-| Fastest Model | **Phi-3 Mini** |
-| Query Response Time (avg.) | **< 4 seconds** |
-| Cities Covered | **Abu Dhabi, Dubai, Sharjah, +** |
+| Best Overall Accuracy | **Llama 3** |
+| Fastest Response | **Phi-3 Mini (~1.9s)** |
+| Cities Covered | **Dubai, Abu Dhabi, Sharjah & more** |
+| Data Source | **Open Charge Map (live)** |
 
 </div>
 
@@ -182,35 +182,26 @@ Four open-source LLMs were benchmarked on UAE EV infrastructure Q&A tasks:
 ## 📁 Project Structure
 
 ```
-ev-ai-lab/
+uae-ev-llm/
 │
 ├── 📂 backend/
-│   ├── main.py                  # FastAPI application entry point
-│   ├── rag_pipeline.py          # RAG chunking, embedding, retrieval
-│   ├── model_router.py          # Ollama model management
-│   ├── evaluator.py             # Accuracy & hallucination metrics
-│   ├── pdf_generator.py         # ReportLab report generation
+│   ├── main.py              # FastAPI app — all routes & static file serving
+│   ├── rag.py               # RAG pipeline: chunking, embedding, retrieval
+│   ├── models.py            # Ollama model router & prompt formatting
+│   ├── evaluator.py         # Accuracy & hallucination evaluation engine
 │   └── data/
-│       └── uae_stations.json    # Open Charge Map dataset (UAE)
+│       └── stations.json    # UAE Open Charge Map dataset (~136 stations)
 │
 ├── 📂 frontend/
-│   ├── src/
-│   │   ├── App.jsx              # Root component
-│   │   ├── components/
-│   │   │   ├── QueryPanel.jsx   # Natural language query interface
-│   │   │   ├── MapView.jsx      # Leaflet map with CARTO Positron
-│   │   │   ├── StationCard.jsx  # Per-station detail panel
-│   │   │   └── ModelSelector.jsx
-│   │   └── styles/
-│   │       └── tokens.css       # Design system CSS variables
-│   └── public/
+│   ├── index.html           # Main interface — React loaded via CDN script tags
+│   ├── App.jsx              # Root React component (served as static JS)
+│   ├── map.js               # Leaflet.js map — CARTO Positron + SVG markers
+│   └── style.css            # Styles & design tokens
 │
 ├── 📂 paper/
-│   ├── main.tex                 # IEEE conference paper (IEEEtran)
-│   └── references.bib           # 16 citations
+│   ├── main.tex             # IEEE conference paper (IEEEtran, ~7 pages)
+│   └── references.bib       # 16 citations
 │
-├── requirements.txt
-├── package.json
 └── README.md
 ```
 
@@ -220,9 +211,8 @@ ev-ai-lab/
 
 ### Prerequisites
 
-- Python 3.10+
-- Node.js 18+
-- [Ollama](https://ollama.ai) installed and running
+- **Python 3.10+**
+- **[Ollama](https://ollama.ai)** installed and running locally
 
 ### 1 — Pull the LLMs
 
@@ -233,29 +223,22 @@ ollama pull gemma
 ollama pull phi3
 ```
 
-### 2 — Backend
+### 2 — Clone & Install
 
 ```bash
-# Clone the repository
-git clone https://github.com/<your-org>/ev-ai-lab.git
-cd ev-ai-lab
+git clone https://github.com/Abaan-Ahmed/uae-ev-llm.git
+cd uae-ev-llm
 
-# Install Python dependencies
-pip install -r requirements.txt
+pip install fastapi uvicorn httpx sentence-transformers
+```
 
-# Start the API server
+### 3 — Run
+
+```bash
 uvicorn backend.main:app --reload --port 8000
 ```
 
-### 3 — Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open **http://localhost:5173** and start querying.
+Open **[http://localhost:8000](http://localhost:8000)** — the map, query interface, and evaluation dashboard are all served from there.
 
 ---
 
@@ -264,6 +247,9 @@ Open **http://localhost:5173** and start querying.
 <details>
 <summary><b>POST /query</b> — Natural language EV station query</summary>
 
+<br/>
+
+**Request:**
 ```json
 {
   "question": "Where can I charge a Rivian in Abu Dhabi?",
@@ -276,15 +262,17 @@ Open **http://localhost:5173** and start querying.
 ```json
 {
   "answer": "There are 3 stations in Abu Dhabi compatible with the Rivian R1T...",
-  "sources": [...],
-  "latency_ms": 3241,
+  "sources": ["ADNOC Corniche", "Mussafah Industrial Area"],
+  "latency_ms": 3100,
   "model": "llama3"
 }
 ```
 </details>
 
 <details>
-<summary><b>GET /stations</b> — Retrieve all indexed UAE charging stations</summary>
+<summary><b>GET /stations</b> — All indexed UAE charging stations</summary>
+
+<br/>
 
 ```json
 {
@@ -296,7 +284,8 @@ Open **http://localhost:5173** and start querying.
       "lat": 24.4875,
       "lng": 54.3703,
       "connectors": ["CCS2", "CHAdeMO"],
-      "power_kw": 50
+      "power_kw": 50,
+      "status": "Operational"
     }
   ],
   "total": 136
@@ -305,14 +294,18 @@ Open **http://localhost:5173** and start querying.
 </details>
 
 <details>
-<summary><b>POST /evaluate</b> — Run benchmark across all models</summary>
+<summary><b>POST /evaluate</b> — Run benchmark across all four models</summary>
 
+<br/>
+
+**Request:**
 ```json
 {
-  "test_suite": "default",
   "models": ["llama3", "mistral", "gemma", "phi3"]
 }
 ```
+
+**Response:** Per-model scorecard with accuracy, hard/soft hallucination rates, and average latency.
 </details>
 
 ---
@@ -323,14 +316,13 @@ Open **http://localhost:5173** and start querying.
 
 | Layer | Technology |
 |:------|:-----------|
-| **LLM Serving** | [Ollama](https://ollama.ai) — local model runtime |
-| **Backend** | [FastAPI](https://fastapi.tiangolo.com) · Python 3.10+ |
-| **Frontend** | [React 18](https://react.dev) · Vite |
-| **Mapping** | [Leaflet.js](https://leafletjs.com) · CARTO Positron tiles |
-| **RAG** | Custom pipeline — chunking, embedding, cosine retrieval |
-| **PDF Reports** | [ReportLab](https://www.reportlab.com) |
-| **Data Source** | [Open Charge Map API](https://openchargemap.org) |
-| **LLMs Evaluated** | Llama 3 · Mistral 7B · Gemma 7B · Phi-3 Mini |
+| **LLM Runtime** | [Ollama](https://ollama.ai) — local model serving |
+| **Backend & API** | [FastAPI](https://fastapi.tiangolo.com) · Python 3.10+ · Uvicorn |
+| **Frontend** | React (via CDN) · Vanilla CSS · JavaScript (served by FastAPI) |
+| **Maps** | [Leaflet.js](https://leafletjs.com) · CARTO Positron tiles · Custom SVG markers |
+| **RAG** | Custom pipeline — chunking, sentence-transformers embeddings, cosine retrieval |
+| **Data Source** | [Open Charge Map API](https://openchargemap.org) — UAE dataset |
+| **LLMs Evaluated** | Llama 3 (8B) · Mistral 7B · Gemma 7B · Phi-3 Mini (3.8B) |
 
 </div>
 
@@ -340,16 +332,18 @@ Open **http://localhost:5173** and start querying.
 
 <div align="center">
 
-| Name | Role |
-|:-----|:-----|
-| **Mohammed Almuzaki** | Systems Architecture & Backend Development |
-| **Mohammad Almheiri** | RAG Pipeline & Model Integration |
-| **Amir** | Frontend Development & Map Visualization |
-| **Abaan** | Evaluation Framework & Research Lead |
+| Member | Contribution |
+|:-------|:------------|
+| **Mohammed Almuzaki** | Systems Architecture · Backend Development |
+| **Mohammad Almheiri** | RAG Pipeline · Model Integration |
+| **Amir** | Frontend · Map Visualization |
+| **Abaan Ahmed** | Evaluation Framework · Research Lead |
 
-**Supervised by:** Dr. Muhammad Fahad Zia — *American University in Dubai*
+<br/>
 
-**Research Collaborators:** Dr. Eyhab Al-Masri & Mansur — *University of Washington*
+**Supervised by** &nbsp;·&nbsp; Dr. Muhammad Fahad Zia &nbsp;·&nbsp; *American University in Dubai*
+
+**Research Collaborators** &nbsp;·&nbsp; Dr. Eyhab Al-Masri & Mansur &nbsp;·&nbsp; *University of Washington*
 
 </div>
 
@@ -357,31 +351,31 @@ Open **http://localhost:5173** and start querying.
 
 ## 📄 Paper
 
-This system is documented in a full IEEE conference paper submitted as part of **EECE 305 — Microelectronic Devices and Circuits II** at AUD.
+This system is the subject of a full **IEEE conference paper** submitted as part of EECE 305 — Microelectronic Devices and Circuits II at AUD.
 
 > *"EV AI Lab: A Retrieval-Augmented Generation Framework for UAE Electric Vehicle Charging Infrastructure Queries"*
-> — Mohammed Almuzaki, Mohammad Almheiri, Amir, Abaan · AUD × University of Washington, 2024
+> &nbsp;—&nbsp; M. Almuzaki, M. Almheiri, Amir, A. Ahmed &nbsp;·&nbsp; AUD × University of Washington, 2025
 
 ---
 
 ## 🤝 Acknowledgments
 
-- **Open Charge Map** for the UAE EV dataset
-- **Ollama** for making local LLM deployment trivial
-- **Meta, Mistral AI, Google DeepMind, and Microsoft** for releasing the open-source models evaluated in this work
-- The **American University in Dubai** and the **University of Washington** for supporting this research collaboration
+- **[Open Charge Map](https://openchargemap.org)** — UAE EV charging station dataset
+- **[Ollama](https://ollama.ai)** — making local LLM deployment accessible to everyone
+- **Meta AI, Mistral AI, Google DeepMind, and Microsoft Research** — for open-sourcing the models evaluated in this work
+- **American University in Dubai** and the **University of Washington** — for supporting this research collaboration
 
 ---
 
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=100&section=footer"/>
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=100&section=footer" alt="footer"/>
+  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer" alt="footer"/>
 </picture>
 
-**Made with ⚡ by the EV AI Lab Team · American University in Dubai**
+**Made with ⚡ by the EV AI Lab Team &nbsp;·&nbsp; American University in Dubai × University of Washington**
 
-*If this project helped you, consider giving it a ⭐*
+*If this project was useful to you, consider leaving a* ⭐
 
 </div>
